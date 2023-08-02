@@ -1,4 +1,3 @@
-"use client";
 import {
   AiOutlineUser,
   AiOutlineUserSwitch,
@@ -7,12 +6,15 @@ import {
   AiOutlineDollar,
 } from "react-icons/ai";
 
-import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
 import { Header } from "@/components/Header";
 import { CardButton } from "@/components/CardButton";
+import { rideService } from "@/services/ride";
+import { printDate, toCurrency } from "@/utils/formatters";
+import { calculateRideTotal } from "@/logic/calculateRideTotal";
 
-export default function Home() {
+export default async function Home() {
+  const rides = await rideService.getRecents();
   return (
     <main>
       <Header />
@@ -59,69 +61,29 @@ export default function Home() {
           </a>
         </div>
         <ul className="space-y-2">
-          <li>
-            <Card>
-              <div className="flex justify-between">
-                <div>
-                  <p>Fiat Cronos</p>
-                  <div className="flex space-x-2">
-                    <p className="text-xs text-gray-600">19/07/2023</p>
-                    <p className="text-xs text-gray-600 flex items-center">
-                      <AiOutlineUser /> 3
-                    </p>
-                    <p className="text-xs text-gray-600 flex items-center">
-                      <AiOutlineUserSwitch /> 0
-                    </p>
+          {rides.map((ride) => (
+            <li key={ride._id}>
+              <Card>
+                <div className="flex justify-between">
+                  <div>
+                    <p>{ride.car.model}</p>
+                    <div className="flex space-x-2">
+                      <p className="text-xs text-gray-600">{printDate(ride.date)}</p>
+                      <p className="text-xs text-gray-600 flex items-center">
+                        <AiOutlineUser /> {ride.passengers}
+                      </p>
+                      <p className="text-xs text-gray-600 flex items-center">
+                        <AiOutlineUserSwitch /> {ride.passengersOneWay || 0}
+                      </p>
+                    </div>
                   </div>
+                  <p>
+                    <strong>{toCurrency(calculateRideTotal(ride))}</strong>
+                  </p>
                 </div>
-                <p>
-                  <strong>R$ 30,00</strong>
-                </p>
-              </div>
-            </Card>
-          </li>
-          <li>
-            <Card>
-              <div className="flex justify-between">
-                <div>
-                  <p>Fiat Cronos</p>
-                  <div className="flex space-x-2">
-                    <p className="text-xs text-gray-600">19/07/2023</p>
-                    <p className="text-xs text-gray-600 flex items-center">
-                      <AiOutlineUser /> 3
-                    </p>
-                    <p className="text-xs text-gray-600 flex items-center">
-                      <AiOutlineUserSwitch /> 0
-                    </p>
-                  </div>
-                </div>
-                <p>
-                  <strong>R$ 30,00</strong>
-                </p>
-              </div>
-            </Card>
-          </li>
-          <li>
-            <Card>
-              <div className="flex justify-between">
-                <div>
-                  <p>Fiat Cronos</p>
-                  <div className="flex space-x-2">
-                    <p className="text-xs text-gray-600">19/07/2023</p>
-                    <p className="text-xs text-gray-600 flex items-center">
-                      <AiOutlineUser /> 3
-                    </p>
-                    <p className="text-xs text-gray-600 flex items-center">
-                      <AiOutlineUserSwitch /> 0
-                    </p>
-                  </div>
-                </div>
-                <p>
-                  <strong>R$ 30,00</strong>
-                </p>
-              </div>
-            </Card>
-          </li>
+              </Card>
+            </li>
+          ))}
         </ul>
       </div>
     </main>

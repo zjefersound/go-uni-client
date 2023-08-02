@@ -1,7 +1,12 @@
+import { Header } from "@/components/Header";
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>New ride</h1>
+    <main>
+      <Header title="Nova carona" goBackHref="/" />
+      <div className="p-3 flex flex-col space-y-3">
+
+      </div>
     </main>
   );
 }
