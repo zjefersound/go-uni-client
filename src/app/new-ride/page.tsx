@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
 
-export default function Home() {
+export default function NewRide() {
   return (
     <main>
       <Header title="Nova carona" goBackHref="/" />

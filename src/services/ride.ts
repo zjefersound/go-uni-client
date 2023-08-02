@@ -3,7 +3,9 @@ import { IRide } from "@/models/IRide";
 import { groq } from "next-sanity";
 
 const getToday: () => Promise<IRide> = () => {
-  return sanityClient.fetch(groq`*[_type == "ride"][date == "${new Date().toISOString().split('T')[0]}"][0]{
+  return sanityClient.fetch(groq`*[_type == "ride"][date == "${
+    new Date().toISOString().split("T")[0]
+  }"][0]{
     _id,
     _createdAt,
     passengers,
@@ -20,7 +22,9 @@ const getToday: () => Promise<IRide> = () => {
 };
 
 const getRecents: () => Promise<IRide[]> = () => {
-  return sanityClient.fetch(groq`*[_type == "ride"][date != "${new Date().toISOString().split('T')[0]}"] | order(date desc)[0..2]{
+  return sanityClient.fetch(groq`*[_type == "ride"][date != "${
+    new Date().toISOString().split("T")[0]
+  }"] | order(date desc)[0..2]{
     _id,
     _createdAt,
     passengers,
@@ -53,8 +57,26 @@ const getAll: () => Promise<IRide[]> = () => {
   }`);
 };
 
+const getById: (id: string) => Promise<IRide> = (id) => {
+  return sanityClient.fetch(groq`*[_type == "ride"][_id == "${id}"][0]{
+    _id,
+    _createdAt,
+    passengers,
+    passengersOneWay,
+    date,
+    pricePerPassenger,
+    extraCosts,
+    observations,
+    paid,
+    car -> {
+      ...
+    }
+  }`);
+};
+
 export const rideService = {
   getToday,
   getAll,
   getRecents,
+  getById,
 };
