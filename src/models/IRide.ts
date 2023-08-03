@@ -1,4 +1,5 @@
 import { ICar } from "./ICar";
+import { ITrip } from "./ITrip";
 
 export interface IRide {
   _id: string;
@@ -11,4 +12,5 @@ export interface IRide {
   observations: string;
   paid: boolean;
   car: ICar;
+  trip: ITrip;
 }

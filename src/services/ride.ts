@@ -17,6 +17,9 @@ const getToday: () => Promise<IRide> = () => {
     paid,
     car -> {
       ...
+    },
+    trip -> {
+      ...
     }
   }`);
 };
@@ -36,6 +39,9 @@ const getRecents: () => Promise<IRide[]> = () => {
     paid,
     car -> {
       ...
+    },
+    trip -> {
+      ...
     }
   }`);
 };
@@ -53,6 +59,9 @@ const getAll: () => Promise<IRide[]> = () => {
     paid,
     car -> {
       ...
+    },
+    trip -> {
+      ...
     }
   }`);
 };
@@ -69,6 +78,9 @@ const getById: (id: string) => Promise<IRide> = (id) => {
     observations,
     paid,
     car -> {
+      ...
+    },
+    trip -> {
       ...
     }
   }`);

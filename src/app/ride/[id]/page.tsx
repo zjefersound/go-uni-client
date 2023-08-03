@@ -1,16 +1,19 @@
-import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
 import { Header } from "@/components/Header";
+import { Switch } from "@/components/forms/Switch";
 import { urlFor } from "@/config/sanity";
 import { calculateRideTotal } from "@/logic/calculateRideTotal";
 import { rideService } from "@/services/ride";
 import { arrayOfKeys } from "@/utils/arrayOfKeys";
 import { printDate, toCurrency } from "@/utils/formatters";
+import Link from "next/link";
 import {
   AiOutlineCalendar,
-  AiOutlineDollar,
   AiOutlineUser,
   AiOutlineUserSwitch,
+  AiOutlineArrowRight,
+  AiOutlineEdit,
+  AiOutlineEnvironment,
 } from "react-icons/ai";
 
 export default async function Ride({ params }: { params: { id: string } }) {
@@ -29,6 +32,9 @@ export default async function Ride({ params }: { params: { id: string } }) {
               <p className="text-sm text-gray-600">
                 Bancos livres: {ride.car.freeSeats}
               </p>
+              <p className="text-sm text-gray-600">
+                Consumo: {ride.car.kmPerLiter} Km/L
+              </p>
             </div>
             <img
               className="h-[5rem]"
@@ -38,11 +44,39 @@ export default async function Ride({ params }: { params: { id: string } }) {
           </div>
         </Card>
         <Card>
+          <h2 className="font-bold">Trajeto:</h2>
+          <div className="mt-3">
+            <div className="flex justify-evenly items-center my-5">
+              <span className="text-gray-600 flex items-center">
+                <AiOutlineEnvironment className="mr-1" />
+                {ride.trip.from}
+              </span>
+              <AiOutlineArrowRight className="text-emerald-600 h-5 w-5" />
+              <span className="text-gray-600 flex items-center">
+                <AiOutlineEnvironment className="mr-1" />
+                {ride.trip.to}
+              </span>
+            </div>
+            <p className="text-sm text-gray-600">
+              Distância (ida e volta): {ride.trip.distance} Km
+            </p>
+            <p className="text-sm text-gray-600">
+              Duração: {ride.trip.duration} min
+            </p>
+          </div>
+        </Card>
+        <Card>
           <div className="flex items-center">
             <AiOutlineCalendar className="text-emerald-600 mr-1 h-4 w-4" />
             <h2 className="font-bold text-sm">
               {printDate(ride.date)} - Passageiros
             </h2>
+            <Link
+              href={"/edit-ride"}
+              className="ml-auto transition text-emerald-600 hover:text-emerald-500"
+            >
+              <AiOutlineEdit className="h-5 w-5" />
+            </Link>
           </div>
           <div className="text-sm text-gray-600 mt-3">
             <div className="flex justify-between">
@@ -76,7 +110,14 @@ export default async function Ride({ params }: { params: { id: string } }) {
         </Card>
 
         <Card>
-          <h2 className="font-bold">A receber:</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="font-bold">A receber:</h2>
+            <div className="flex items-center">
+              <span className="text-sm mr-2">Recebido:</span>
+              <Switch value={false} />
+            </div>
+          </div>
+
           <div className="text-sm text-gray-600 mt-3">
             <p>Passageiros</p>
             <hr className="my-1" />
@@ -107,7 +148,7 @@ export default async function Ride({ params }: { params: { id: string } }) {
             </div>
           </div>
 
-          <hr className="my-1 border-emerald-600"/>
+          <hr className="my-1 border-emerald-600" />
           <div className=" text-emerald-600">
             <div className="flex justify-between">
               <p>Total</p>
