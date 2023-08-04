@@ -14,6 +14,7 @@ import {
   AiOutlineArrowRight,
   AiOutlineEdit,
   AiOutlineEnvironment,
+  AiOutlineClockCircle
 } from "react-icons/ai";
 
 export default async function Ride({ params }: { params: { id: string } }) {
@@ -46,23 +47,25 @@ export default async function Ride({ params }: { params: { id: string } }) {
         <Card>
           <h2 className="font-bold">Trajeto:</h2>
           <div className="mt-3">
-            <div className="flex justify-evenly items-center my-5">
-              <span className="text-gray-600 flex items-center">
+            <div className="flex justify-evenly items-center mb-3">
+              <span className="text-gray-600 text-sm flex items-center">
                 <AiOutlineEnvironment className="mr-1" />
                 {ride.trip.from}
               </span>
-              <AiOutlineArrowRight className="text-emerald-600 h-5 w-5" />
-              <span className="text-gray-600 flex items-center">
+              <AiOutlineArrowRight className="text-emerald-600 h-4 w-4" />
+              <span className="text-gray-600 text-sm flex items-center">
                 <AiOutlineEnvironment className="mr-1" />
                 {ride.trip.to}
               </span>
             </div>
-            <p className="text-sm text-gray-600">
-              Distância (ida e volta): {ride.trip.distance} Km
-            </p>
-            <p className="text-sm text-gray-600">
-              Duração: {ride.trip.duration} min
-            </p>
+            <div className="flex space-x-4">
+              <p className="text-xs text-gray-600">
+                Distância (ida e volta): {ride.trip.distance} Km
+              </p>
+              <p className="text-xs text-gray-600 flex items-center">
+                <AiOutlineClockCircle className="mr-1"/> {ride.trip.duration} min
+              </p>
+            </div>
           </div>
         </Card>
         <Card>
@@ -128,7 +131,7 @@ export default async function Ride({ params }: { params: { id: string } }) {
               </div>
             ))}
           </div>
-          {ride.passengersOneWay && (
+          {Boolean(ride.passengersOneWay) && (
             <div className="text-sm text-gray-600 mt-3">
               <p>Passageiros (apenas ida ou volta)</p>
               <hr className="my-1" />
