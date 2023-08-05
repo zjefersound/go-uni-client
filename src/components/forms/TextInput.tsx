@@ -41,7 +41,7 @@ TextInputIcon.displayName = "TextInput.Icon";
 function TextInputInput(props: TextInputInputProps) {
   return (
     <input
-      className="outline-0 bg-transparent flex-1 text-gray-900 text-xs placeholder:text-gray-600"
+      className="outline-0 bg-transparent flex-1 text-gray-800 text-sm placeholder:text-gray-600"
       {...props}
     />
   );
@@ -51,7 +51,7 @@ TextInputInput.displayName = "TextInput.Input";
 function TextInputCurrency(props: CurrencyInputProps) {
   return (
     <CurrencyInput
-      className="outline-0 bg-transparent flex-1 text-gray-900 text-xs placeholder:text-gray-600"
+      className="outline-0 bg-transparent flex-1 text-gray-800 text-sm placeholder:text-gray-600"
       {...props}
     />
   );
