@@ -1,4 +1,4 @@
-import { sanityClient } from "@/config/sanity";
+import { sanityClient } from "@/configs/sanity";
 import { IRide } from "@/models/IRide";
 import { groq } from "next-sanity";
 

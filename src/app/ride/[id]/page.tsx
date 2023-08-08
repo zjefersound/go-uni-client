@@ -1,6 +1,6 @@
 import { Card } from "@/components/Card";
 import { Header } from "@/components/Header";
-import { urlFor } from "@/config/sanity";
+import { urlFor } from "@/configs/sanity";
 import { calculateRideTotal } from "@/logic/calculateRideTotal";
 import { rideService } from "@/services/ride";
 import { arrayOfKeys } from "@/utils/arrayOfKeys";

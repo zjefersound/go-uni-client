@@ -1,5 +1,5 @@
 import { Select } from "@/components/forms/Select";
-import { urlFor } from "@/config/sanity";
+import { urlFor } from "@/configs/sanity";
 import { ICar } from "@/models/ICar";
 
 interface Props {

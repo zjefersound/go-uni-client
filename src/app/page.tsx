@@ -12,7 +12,7 @@ import { CardButton } from "@/components/CardButton";
 import { rideService } from "@/services/ride";
 import { printDate, toCurrency } from "@/utils/formatters";
 import { calculateRideTotal } from "@/logic/calculateRideTotal";
-import { urlFor } from "@/config/sanity";
+import { urlFor } from "@/configs/sanity";
 import Link from "next/link";
 
 export default async function Home() {

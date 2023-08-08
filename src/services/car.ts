@@ -1,4 +1,4 @@
-import { sanityClient } from "@/config/sanity";
+import { sanityClient } from "@/configs/sanity";
 import { ICar } from "@/models/ICar";
 import { groq } from "next-sanity";
 
