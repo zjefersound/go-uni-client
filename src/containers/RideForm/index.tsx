@@ -10,21 +10,18 @@ import { Switch } from "@/components/forms/Switch";
 import { Button } from "@/components/Button";
 import { isValidNewRide } from "./validation";
 import { IValidationError } from "@/models/IValidationReturn";
-import { useRouter } from "next/navigation";
-import { rideService } from "@/services/ride";
+import { IRidePayload } from "@/services/ride";
 import { FormControl } from "@/components/forms/FormControl";
 import { Loading } from "@/components/Loading";
-import { useToast } from "@/hooks/useToast";
 
 interface Props {
   trips: ITrip[];
   cars: ICar[];
+  submitText: string;
+  onSubmit: (rideData: IRidePayload) => Promise<void>;
 }
 
-export function RideForm({ trips, cars }: Props) {
-  const router = useRouter();
-  const { launchToast } = useToast();
-
+export function RideForm({ trips, cars, submitText, onSubmit }: Props) {
   const [loading, setLoading] = useState(false);
   const [rideData, setRideData] = useState({
     tripId: trips[0]._id,
@@ -33,6 +30,12 @@ export function RideForm({ trips, cars }: Props) {
   } as any);
 
   const [errors, setErrors] = useState<IValidationError[]>([]);
+
+  const handleChangeValue = (id: string, value: any) => {
+    setRideData((d: any) => ({ ...d, [id]: value }));
+    const newErrors = errors.filter((error) => error.field !== id);
+    setErrors(newErrors);
+  };
 
   const handleSubmit = () => {
     setLoading(true);
@@ -43,27 +46,7 @@ export function RideForm({ trips, cars }: Props) {
       setLoading(false);
     } else {
       setErrors([]);
-      rideService
-        .create(rideData)
-        .then((res) => {
-          launchToast({
-            open: true,
-            title: "Carona criada",
-            description: "",
-            type: "success",
-          });
-          setLoading(false);
-          router.push("/");
-        })
-        .catch((error) => {
-          launchToast({
-            open: true,
-            title: "Erro ao criar carona",
-            description: "Tente novamente",
-            type: "error",
-          });
-          setLoading(false);
-        });
+      onSubmit(rideData).finally(() => setLoading(false));
     }
   };
 
@@ -74,18 +57,14 @@ export function RideForm({ trips, cars }: Props) {
           <SelectTrip
             items={trips}
             value={rideData.tripId}
-            onChange={(value) =>
-              setRideData((d: any) => ({ ...d, tripId: value }))
-            }
+            onChange={(value) => handleChangeValue("tripId", value)}
           />
         </FormControl>
         <FormControl id="carId" label="Carro" errors={errors}>
           <SelectCar
             items={cars}
             value={rideData.carId}
-            onChange={(value) =>
-              setRideData((d: any) => ({ ...d, carId: value }))
-            }
+            onChange={(value) => handleChangeValue("carId", value)}
           />
         </FormControl>
         <FormControl id="date" label="Data" errors={errors}>
@@ -93,9 +72,7 @@ export function RideForm({ trips, cars }: Props) {
             <TextInput.Input
               type="date"
               value={rideData.date}
-              onChange={(e) =>
-                setRideData((d: any) => ({ ...d, date: e.target.value }))
-              }
+              onChange={(e) => handleChangeValue("date", e.target.value)}
               placeholder="mm/dd/yyyy"
             />
           </TextInput.Root>
@@ -106,10 +83,10 @@ export function RideForm({ trips, cars }: Props) {
               type="number"
               value={rideData.passengers}
               onChange={(e) =>
-                setRideData((d: any) => ({
-                  ...d,
-                  passengers: e.target.value ? Number(e.target.value) : "",
-                }))
+                handleChangeValue(
+                  "passengers",
+                  e.target.value ? Number(e.target.value) : ""
+                )
               }
               placeholder="0"
             />
@@ -125,12 +102,10 @@ export function RideForm({ trips, cars }: Props) {
               type="number"
               value={rideData.passengersOneWay}
               onChange={(e) =>
-                setRideData((d: any) => ({
-                  ...d,
-                  passengersOneWay: e.target.value
-                    ? Number(e.target.value)
-                    : "",
-                }))
+                handleChangeValue(
+                  "passengersOneWay",
+                  e.target.value ? Number(e.target.value) : ""
+                )
               }
               placeholder="0"
             />
@@ -151,10 +126,7 @@ export function RideForm({ trips, cars }: Props) {
               defaultValue={rideData.pricePerPassenger}
               decimalsLimit={2}
               onValueChange={(_, name, values) =>
-                setRideData((d: any) => ({
-                  ...d,
-                  pricePerPassenger: values?.float || 0,
-                }))
+                handleChangeValue("pricePerPassenger", values?.float || 0)
               }
               required
             />
@@ -171,10 +143,7 @@ export function RideForm({ trips, cars }: Props) {
               defaultValue={rideData.extraCosts}
               decimalsLimit={2}
               onValueChange={(_, name, values) =>
-                setRideData((d: any) => ({
-                  ...d,
-                  extraCosts: values?.float || 0,
-                }))
+                handleChangeValue("extraCosts", values?.float || 0)
               }
               required
             />
@@ -185,10 +154,7 @@ export function RideForm({ trips, cars }: Props) {
             <TextInput.Input
               value={rideData.observations}
               onChange={(e) =>
-                setRideData((d: any) => ({
-                  ...d,
-                  observations: e.target.value,
-                }))
+                handleChangeValue("observations", e.target.value)
               }
               placeholder="Digite alguma informação adicional..."
             />
@@ -197,14 +163,12 @@ export function RideForm({ trips, cars }: Props) {
         <FormControl id="paid" label="Pago" errors={errors}>
           <Switch
             value={rideData.paid}
-            onChange={(value) =>
-              setRideData((d: any) => ({ ...d, paid: !d.paid }))
-            }
+            onChange={(value) => handleChangeValue("paid", !rideData.paid)}
           />
         </FormControl>
         <Button onClick={handleSubmit} disabled={loading}>
           {loading && <Loading className="mr-2" size="sm" />}
-          Criar carona
+          {submitText}
         </Button>
       </div>
     </>
