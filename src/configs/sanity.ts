@@ -6,7 +6,7 @@ export const sanityClient = createClient({
   apiVersion: process.env.NEXT_PUBLIC_API_VERION,
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
   dataset: process.env.NEXT_PUBLIC_DATASET,
-  useCdn: true,
+  useCdn: false,
   token: process.env.NEXT_PUBLIC_APP_TOKEN,
 });
 

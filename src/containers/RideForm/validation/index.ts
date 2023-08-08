@@ -16,15 +16,6 @@ export function isValidNewRide(ride: IRidePayload): IValidationReturn {
   if (!ride.date) {
     errors.push({ field: "date", message: "Insira uma data" });
   }
-  if (
-    stringToDate(ride.date).getTime() <
-    new Date(new Date().toISOString().slice(0, 10)).getTime()
-  ) {
-    errors.push({
-      field: "date",
-      message: "Insira uma data presente ou futura",
-    });
-  }
   if (ride.passengers <= 0 || !ride.passengers) {
     errors.push({
       field: "passengers",

@@ -131,10 +131,20 @@ const create = (ride: IRidePayload) => {
 };
 
 const patch = (id: string, ride: IRidePatchPayload) => {
-  return sanityClient
-    .patch(id)
-    .set({ ...ride })
-    .commit();
+  const payload: any = { ...ride };
+  if (ride.tripId) {
+    payload.trip = {
+      _ref: ride.tripId,
+      _type: "reference",
+    };
+  }
+  if (ride.carId) {
+    payload.car = {
+      _ref: ride.carId,
+      _type: "reference",
+    };
+  }
+  return sanityClient.patch(id).set(payload).commit();
 };
 
 export const rideService = {

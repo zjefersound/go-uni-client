@@ -4,7 +4,7 @@ import { tripService } from "@/services/trip";
 import { UpdateRideForm } from "./UpdateRideForm";
 import { rideService } from "@/services/ride";
 
-export default async function NewRide({ params }: { params: { id: string } }) {
+export default async function EditRide({ params }: { params: { id: string } }) {
   const { id } = params;
   const ride = await rideService.getById(id);
   const trips = await tripService.getAll();
