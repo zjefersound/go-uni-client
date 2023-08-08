@@ -76,7 +76,7 @@ export default async function Ride({ params }: { params: { id: string } }) {
               {printDate(ride.date)} - Passageiros
             </h2>
             <Link
-              href={"/edit-ride"}
+              href={`/edit-ride/${ride._id}`}
               className="ml-auto transition text-emerald-600 hover:text-emerald-500"
             >
               <AiOutlineEdit className="h-5 w-5" />

@@ -19,15 +19,25 @@ interface Props {
   cars: ICar[];
   submitText: string;
   onSubmit: (rideData: IRidePayload) => Promise<void>;
+  initialData?: IRidePayload;
 }
 
-export function RideForm({ trips, cars, submitText, onSubmit }: Props) {
+export function RideForm({
+  trips,
+  cars,
+  submitText,
+  onSubmit,
+  initialData,
+}: Props) {
   const [loading, setLoading] = useState(false);
-  const [rideData, setRideData] = useState({
-    tripId: trips[0]._id,
-    date: new Date().toISOString().slice(0, 10),
-    paid: false,
-  } as any);
+  const [rideData, setRideData] = useState(
+    initialData ||
+      ({
+        tripId: trips[0]._id,
+        date: new Date().toISOString().slice(0, 10),
+        paid: false,
+      } as any)
+  );
 
   const [errors, setErrors] = useState<IValidationError[]>([]);
 
