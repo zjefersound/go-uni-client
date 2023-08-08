@@ -10,10 +10,11 @@ import { Switch } from "@/components/forms/Switch";
 import { Button } from "@/components/Button";
 import { isValidNewRide } from "./validation";
 import { IValidationError } from "@/models/IValidationReturn";
-import { FieldError } from "@/components/forms/FieldError";
 import { Toast } from "@/components/Toast";
 import { useRouter } from "next/navigation";
 import { rideService } from "@/services/ride";
+import { FormControl } from "@/components/forms/FormControl";
+import { Loading } from "@/components/Loading";
 
 interface Props {
   trips: ITrip[];
@@ -75,8 +76,7 @@ export function RideForm({ trips, cars }: Props) {
   return (
     <>
       <div className="space-y-3 flex flex-col">
-        <div>
-          <label className="text-gray-700 font-bold">Trajeto:</label>
+        <FormControl id="tripId" label="Trajeto" errors={errors}>
           <SelectTrip
             items={trips}
             value={rideData.tripId}
@@ -84,10 +84,8 @@ export function RideForm({ trips, cars }: Props) {
               setRideData((d: any) => ({ ...d, tripId: value }))
             }
           />
-          <FieldError id="tripId" errors={errors} />
-        </div>
-        <div>
-          <label className="text-gray-700 font-bold">Carro:</label>
+        </FormControl>
+        <FormControl id="carId" label="Carro" errors={errors}>
           <SelectCar
             items={cars}
             value={rideData.carId}
@@ -95,10 +93,8 @@ export function RideForm({ trips, cars }: Props) {
               setRideData((d: any) => ({ ...d, carId: value }))
             }
           />
-          <FieldError id="carId" errors={errors} />
-        </div>
-        <div>
-          <label className="text-gray-700 font-bold">Data:</label>
+        </FormControl>
+        <FormControl id="date" label="Data" errors={errors}>
           <TextInput.Root>
             <TextInput.Input
               type="date"
@@ -109,10 +105,8 @@ export function RideForm({ trips, cars }: Props) {
               placeholder="mm/dd/yyyy"
             />
           </TextInput.Root>
-          <FieldError id="date" errors={errors} />
-        </div>
-        <div>
-          <label className="text-gray-700 font-bold">Nº de passageiros:</label>
+        </FormControl>
+        <FormControl id="passengers" label="Nº de passageiros" errors={errors}>
           <TextInput.Root>
             <TextInput.Input
               type="number"
@@ -126,12 +120,12 @@ export function RideForm({ trips, cars }: Props) {
               placeholder="0"
             />
           </TextInput.Root>
-          <FieldError id="passengers" errors={errors} />
-        </div>
-        <div>
-          <label className="text-gray-700 font-bold">
-            Apenas ida ou volta:
-          </label>
+        </FormControl>
+        <FormControl
+          id="passengersOneWay"
+          label="Apenas ida ou volta"
+          errors={errors}
+        >
           <TextInput.Root>
             <TextInput.Input
               type="number"
@@ -147,12 +141,12 @@ export function RideForm({ trips, cars }: Props) {
               placeholder="0"
             />
           </TextInput.Root>
-          <FieldError id="passengersOneWay" errors={errors} />
-        </div>
-        <div>
-          <label className="text-gray-700 font-bold">
-            Preço por passageiro:
-          </label>
+        </FormControl>
+        <FormControl
+          id="pricePerPassenger"
+          label="Preço por passageiro"
+          errors={errors}
+        >
           <TextInput.Root>
             <TextInput.Icon>
               <AiOutlineDollar />
@@ -171,10 +165,8 @@ export function RideForm({ trips, cars }: Props) {
               required
             />
           </TextInput.Root>
-          <FieldError id="pricePerPassenger" errors={errors} />
-        </div>
-        <div>
-          <label className="text-gray-700 font-bold">Custos extras:</label>
+        </FormControl>
+        <FormControl id="extraCosts" label="Custos extras" errors={errors}>
           <TextInput.Root>
             <TextInput.Icon>
               <AiOutlineDollar />
@@ -193,10 +185,8 @@ export function RideForm({ trips, cars }: Props) {
               required
             />
           </TextInput.Root>
-          <FieldError id="extraCosts" errors={errors} />
-        </div>
-        <div>
-          <label className="text-gray-700 font-bold">Observações:</label>
+        </FormControl>
+        <FormControl id="observations" label="Observações" errors={errors}>
           <TextInput.Root>
             <TextInput.Input
               value={rideData.observations}
@@ -209,19 +199,19 @@ export function RideForm({ trips, cars }: Props) {
               placeholder="Digite alguma informação adicional..."
             />
           </TextInput.Root>
-          <FieldError id="observations" errors={errors} />
-        </div>
-        <div>
-          <label className="text-gray-700 font-bold">Pago:</label>
+        </FormControl>
+        <FormControl id="paid" label="Pago" errors={errors}>
           <Switch
             value={rideData.paid}
             onChange={(value) =>
               setRideData((d: any) => ({ ...d, paid: !d.paid }))
             }
           />
-          <FieldError id="paid" errors={errors} />
-        </div>
-        <Button onClick={handleSubmit} disabled={loading}>Criar carona</Button>
+        </FormControl>
+        <Button onClick={handleSubmit} disabled={loading}>
+          {loading && <Loading />}
+          Criar carona
+        </Button>
       </div>
       <Toast
         type={toastProps.type as any}
