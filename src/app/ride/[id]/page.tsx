@@ -1,6 +1,5 @@
 import { Card } from "@/components/Card";
 import { Header } from "@/components/Header";
-import { Switch } from "@/components/forms/Switch";
 import { urlFor } from "@/config/sanity";
 import { calculateRideTotal } from "@/logic/calculateRideTotal";
 import { rideService } from "@/services/ride";

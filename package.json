@@ -12,6 +12,7 @@
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-select": "^1.2.2",
     "@radix-ui/react-switch": "^1.0.3",
+    "@radix-ui/react-toast": "^1.1.4",
     "@sanity/image-url": "^1.0.2",
     "@types/node": "20.4.5",
     "@types/react": "18.2.18",

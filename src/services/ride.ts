@@ -13,6 +13,17 @@ export interface IRidePayload {
   extraCosts: number;
   observations: string;
 }
+export interface IRidePatchPayload {
+  date?: string;
+  paid?: boolean;
+  tripId?: string;
+  carId?: string;
+  passengers?: number;
+  passengersOneWay?: number;
+  pricePerPassenger?: number;
+  extraCosts?: number;
+  observations?: string;
+}
 
 const getToday: () => Promise<IRide> = () => {
   return sanityClient.fetch(groq`*[_type == "ride"][date == "${
@@ -115,10 +126,15 @@ const create = (ride: IRidePayload) => {
     car: {
       _ref: ride.carId,
       _type: "reference",
-    },  
-  }, {
-    token: process.env.NEXT_PUBLIC_APP_TOKEN
+    },
   });
+};
+
+const patch = (id: string, ride: IRidePatchPayload) => {
+  return sanityClient
+    .patch(id)
+    .set({ ...ride })
+    .commit();
 };
 
 export const rideService = {
@@ -127,4 +143,5 @@ export const rideService = {
   getRecents,
   getById,
   create,
+  patch,
 };

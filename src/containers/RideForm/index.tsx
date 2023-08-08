@@ -8,7 +8,6 @@ import { TextInput } from "@/components/forms/TextInput";
 import { AiOutlineDollar } from "react-icons/ai";
 import { Switch } from "@/components/forms/Switch";
 import { Button } from "@/components/Button";
-import { sanityClient } from "@/config/sanity";
 import { isValidNewRide } from "./validation";
 import { IValidationError } from "@/models/IValidationReturn";
 import { FieldError } from "@/components/forms/FieldError";
