@@ -7,7 +7,7 @@ import {
   AiOutlineExclamationCircle,
 } from "react-icons/ai";
 
-interface Props {
+export interface ToastProps {
   type?: "success" | "error" | "warning";
   title: string;
   description?: string;
@@ -28,7 +28,7 @@ export const Toast = ({
   open,
   setOpen,
   duration = 3000,
-}: Props) => {
+}: ToastProps) => {
   const Icon = IconByType[type];
   return (
     <ToastPrimitive.Provider swipeDirection="right" duration={duration}>

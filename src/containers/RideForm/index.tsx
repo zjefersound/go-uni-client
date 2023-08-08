@@ -10,11 +10,11 @@ import { Switch } from "@/components/forms/Switch";
 import { Button } from "@/components/Button";
 import { isValidNewRide } from "./validation";
 import { IValidationError } from "@/models/IValidationReturn";
-import { Toast } from "@/components/Toast";
 import { useRouter } from "next/navigation";
 import { rideService } from "@/services/ride";
 import { FormControl } from "@/components/forms/FormControl";
 import { Loading } from "@/components/Loading";
+import { useToast } from "@/hooks/useToast";
 
 interface Props {
   trips: ITrip[];
@@ -23,6 +23,7 @@ interface Props {
 
 export function RideForm({ trips, cars }: Props) {
   const router = useRouter();
+  const { launchToast } = useToast();
 
   const [loading, setLoading] = useState(false);
   const [rideData, setRideData] = useState({
@@ -30,13 +31,6 @@ export function RideForm({ trips, cars }: Props) {
     date: new Date().toISOString().slice(0, 10),
     paid: false,
   } as any);
-
-  const [toastProps, setToastProps] = useState({
-    open: false,
-    type: "success",
-    title: "",
-    description: "",
-  });
 
   const [errors, setErrors] = useState<IValidationError[]>([]);
 
@@ -52,7 +46,7 @@ export function RideForm({ trips, cars }: Props) {
       rideService
         .create(rideData)
         .then((res) => {
-          setToastProps({
+          launchToast({
             open: true,
             title: "Carona criada",
             description: "",
@@ -62,7 +56,7 @@ export function RideForm({ trips, cars }: Props) {
           router.push("/");
         })
         .catch((error) => {
-          setToastProps({
+          launchToast({
             open: true,
             title: "Erro ao criar carona",
             description: "Tente novamente",
@@ -209,17 +203,10 @@ export function RideForm({ trips, cars }: Props) {
           />
         </FormControl>
         <Button onClick={handleSubmit} disabled={loading}>
-          {loading && <Loading />}
+          {loading && <Loading className="mr-2" size="sm" />}
           Criar carona
         </Button>
       </div>
-      <Toast
-        type={toastProps.type as any}
-        title={toastProps.title}
-        description={toastProps.description}
-        open={toastProps.open}
-        setOpen={(value) => setToastProps({ ...toastProps, open: value })}
-      />
     </>
   );
 }
