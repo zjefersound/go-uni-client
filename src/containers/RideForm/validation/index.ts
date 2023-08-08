@@ -1,38 +1,59 @@
-import { IValidationError, IValidationReturn } from "@/models/IValidationReturn";
+import {
+  IValidationError,
+  IValidationReturn,
+} from "@/models/IValidationReturn";
 import { IRidePayload } from "@/services/ride";
 import { stringToDate } from "@/utils/stringToDate";
 
 export function isValidNewRide(ride: IRidePayload): IValidationReturn {
   const errors: IValidationError[] = [];
-  if(!ride.tripId) {
-    errors.push({ field: 'tripId', message: "Selecione um trajeto" })
+  if (!ride.tripId) {
+    errors.push({ field: "tripId", message: "Selecione um trajeto" });
   }
-  if(!ride.carId) {
-    errors.push({ field: 'carId', message: "Selecione um carro." })
+  if (!ride.carId) {
+    errors.push({ field: "carId", message: "Selecione um carro." });
   }
-  if(!ride.date) {
-    errors.push({ field: 'date', message: "Insira uma data" })
+  if (!ride.date) {
+    errors.push({ field: "date", message: "Insira uma data" });
   }
-  if(stringToDate(ride.date).getTime() < new Date().getTime()) {
-    errors.push({ field: 'date', message: "Insira uma data presente ou futura" })
+  if (
+    stringToDate(ride.date).getTime() <
+    new Date(new Date().toISOString().slice(0, 10)).getTime()
+  ) {
+    errors.push({
+      field: "date",
+      message: "Insira uma data presente ou futura",
+    });
   }
-  if(ride.passengers <= 0 || !ride.passengers) {
-    errors.push({ field: 'passengers', message: "O valor deve ser maior que zero" })
+  if (ride.passengers <= 0 || !ride.passengers) {
+    errors.push({
+      field: "passengers",
+      message: "O valor deve ser maior que zero",
+    });
   }
-  if(ride.passengersOneWay < 0) {
-    errors.push({ field: 'passengersOneWay', message: "O valor não pode ser negativo" })
-  }
-  
-  if(ride.pricePerPassenger < 0 || !ride.pricePerPassenger) {
-    errors.push({ field: 'pricePerPassenger', message: "O valor não pode ser negativo" })
+  if (ride.passengersOneWay < 0) {
+    errors.push({
+      field: "passengersOneWay",
+      message: "O valor não pode ser negativo",
+    });
   }
 
-  if(ride.extraCosts < 0) {
-    errors.push({ field: 'extraCosts', message: "O valor não pode ser negativo" })
+  if (ride.pricePerPassenger < 0 || !ride.pricePerPassenger) {
+    errors.push({
+      field: "pricePerPassenger",
+      message: "O valor não pode ser negativo",
+    });
+  }
+
+  if (ride.extraCosts < 0) {
+    errors.push({
+      field: "extraCosts",
+      message: "O valor não pode ser negativo",
+    });
   }
 
   return {
     isValid: !errors.length,
-    errors
-  }
+    errors,
+  };
 }

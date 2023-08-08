@@ -12,6 +12,7 @@ import { sanityClient } from "@/config/sanity";
 import { isValidNewRide } from "./validation";
 import { IValidationError } from "@/models/IValidationReturn";
 import { FieldError } from "@/components/forms/FieldError";
+import { rideService } from "@/services/ride";
 
 interface Props {
   trips: ITrip[];
@@ -21,7 +22,8 @@ interface Props {
 export function RideForm({ trips, cars }: Props) {
   const [rideData, setRideData] = useState({
     tripId: trips[0]._id,
-    date: new Date().toISOString().slice(0, 10)
+    date: new Date().toISOString().slice(0, 10),
+    paid: false,
   } as any);
   const [errors, setErrors] = useState<IValidationError[]>([])
 
@@ -32,8 +34,16 @@ export function RideForm({ trips, cars }: Props) {
       setErrors(newErrors);
     } else {
       setErrors([]);
+      rideService.create(rideData).then(res => {
+        console.log(res);
+        alert('Carona criada')
+        
+      }).catch(error => {
+        console.log(error);
+        alert('Error')
+        
+      })
     }
-    // sanityClient.create(rideData);
   }
 
   return (

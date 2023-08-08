@@ -115,7 +115,9 @@ const create = (ride: IRidePayload) => {
     car: {
       _ref: ride.carId,
       _type: "reference",
-    },
+    },  
+  }, {
+    token: process.env.NEXT_PUBLIC_APP_TOKEN
   });
 };
 

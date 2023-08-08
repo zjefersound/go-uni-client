@@ -14,13 +14,14 @@ import {
   AiOutlineArrowRight,
   AiOutlineEdit,
   AiOutlineEnvironment,
-  AiOutlineClockCircle
+  AiOutlineClockCircle,
 } from "react-icons/ai";
+import { SwitchPaid } from "./SwitchPaid";
 
 export default async function Ride({ params }: { params: { id: string } }) {
   const { id } = params;
   const ride = await rideService.getById(id);
-
+  const fuelPrice = 5.93;
   return (
     <main>
       <Header title="Carona" goBackHref="/" />
@@ -63,7 +64,8 @@ export default async function Ride({ params }: { params: { id: string } }) {
                 Distância (ida e volta): {ride.trip.distance} Km
               </p>
               <p className="text-xs text-gray-600 flex items-center">
-                <AiOutlineClockCircle className="mr-1"/> {ride.trip.duration} min
+                <AiOutlineClockCircle className="mr-1" /> {ride.trip.duration}{" "}
+                min
               </p>
             </div>
           </div>
@@ -113,11 +115,26 @@ export default async function Ride({ params }: { params: { id: string } }) {
         </Card>
 
         <Card>
+          <h2 className="font-bold">Custos:</h2>
+          <div className="mt-3">
+            <p className="text-sm text-gray-600">
+              Litro gasolina: {toCurrency(fuelPrice)}
+            </p>
+            <p className="text-sm text-red-600">
+              Custo pela viagem:{" "}
+              {toCurrency(
+                (ride.trip.distance / ride.car.kmPerLiter) * fuelPrice
+              )}
+            </p>
+          </div>
+        </Card>
+
+        <Card>
           <div className="flex items-center justify-between">
             <h2 className="font-bold">A receber:</h2>
             <div className="flex items-center">
               <span className="text-sm mr-2">Recebido:</span>
-              <Switch value={false} />
+              <SwitchPaid ride={ride} />
             </div>
           </div>
 
