@@ -19,15 +19,15 @@ export function UpdateRideForm({ ride, cars, trips }: Props) {
   const onSubmit = (rideData: IRidePayload) => {
     return rideService
       .patch(ride._id, rideData)
-      .then((res) => {        
+      .then((res) => {
         launchToast({
           open: true,
           title: "Carona atualizada",
           description: "",
           type: "success",
         });
-        router.push(`/ride/${ride._id}`);
       })
+      .then(() => router.push(`/ride/${ride._id}`))
       .catch((error) => {
         launchToast({
           open: true,
