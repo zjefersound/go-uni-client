@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { Card } from "@/components/Card";
 import { Header } from "@/components/Header";
 import { urlFor } from "@/configs/sanity";
@@ -17,11 +17,16 @@ import {
   AiOutlineClockCircle,
 } from "react-icons/ai";
 import { SwitchPaid } from "./SwitchPaid";
+import { fuelSupplyService } from "@/services/fuelSupply";
+import { ESTIMATED_FUEL_PRICE_PER_LITER } from "@/constants";
+import { calculateFuelCost } from "@/logic/calculateFuelCost";
 
 export default async function Ride({ params }: { params: { id: string } }) {
   const { id } = params;
   const ride = await rideService.getById(id);
-  const fuelPrice = 5.93;
+  const lastFuelSupply = await fuelSupplyService.getLastUntilDate(ride.date);
+  const fuelPrice =
+    lastFuelSupply?.pricePerLiter || ESTIMATED_FUEL_PRICE_PER_LITER;
   return (
     <main>
       <Header title="Carona" goBackHref="/" />
@@ -35,7 +40,7 @@ export default async function Ride({ params }: { params: { id: string } }) {
                 Bancos livres: {ride.car.freeSeats}
               </p>
               <p className="text-sm text-gray-600">
-                Consumo: {ride.car.kmPerLiter} Km/L
+                Consumo: {ride.car.distancePerLiter} Km/L
               </p>
             </div>
             <img
@@ -118,12 +123,19 @@ export default async function Ride({ params }: { params: { id: string } }) {
           <h2 className="font-bold">Custos:</h2>
           <div className="mt-3">
             <p className="text-sm text-gray-600">
+              Abastecido em: {printDate(lastFuelSupply.date)}
+            </p>
+            <p className="text-sm text-gray-600">
               Litro gasolina: {toCurrency(fuelPrice)}
             </p>
             <p className="text-sm text-red-600">
               Custo pela viagem:{" "}
               {toCurrency(
-                (ride.trip.distance / ride.car.kmPerLiter) * fuelPrice
+                calculateFuelCost({
+                  distance: ride.trip.distance,
+                  distancePerLiter: ride.car.distancePerLiter,
+                  fuelPrice,
+                })
               )}
             </p>
           </div>

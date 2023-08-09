@@ -1,0 +1,1 @@
+export const ESTIMATED_FUEL_PRICE_PER_LITER = 5.93;

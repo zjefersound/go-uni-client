@@ -1,3 +1,4 @@
+"use client";
 import {
   AiOutlineUser,
   AiOutlineUserSwitch,
@@ -55,7 +56,7 @@ export default async function Home() {
           <CardButton href="/new-ride">
             <AiOutlinePlus className="h-8 w-8 text-emerald-600" /> Nova carona
           </CardButton>
-          <CardButton href="/new-ride">
+          <CardButton href="/payments">
             <AiOutlineDollar className="h-8 w-8 text-emerald-600" />
             Pagamentos
           </CardButton>
@@ -67,9 +68,9 @@ export default async function Home() {
 
         <div className="flex justify-between">
           <h3 className="font-bold">Últimas caronas:</h3>
-          <a className="text-emerald-600 font-semibold" href="">
+          <Link className="text-emerald-600 font-semibold" href="/rides">
             Ver todas
-          </a>
+          </Link>
         </div>
         <ul className="space-y-2">
           {rides.map((ride) => (
@@ -78,10 +79,10 @@ export default async function Home() {
                 <Card>
                   <div className="flex justify-between">
                     <div>
-                      <p>{ride.car.model}</p>
+                      <p> {printDate(ride.date)}</p>
                       <div className="flex space-x-2">
                         <p className="text-xs text-gray-600">
-                          {printDate(ride.date)}
+                          {ride.car.model}
                         </p>
                         <p className="text-xs text-gray-600 flex items-center">
                           <AiOutlineUser /> {ride.passengers}

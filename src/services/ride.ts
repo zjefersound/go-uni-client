@@ -70,7 +70,7 @@ const getRecents: () => Promise<IRide[]> = () => {
 };
 
 const getAll: () => Promise<IRide[]> = () => {
-  return sanityClient.fetch(groq`*[_type == "ride"]{
+  return sanityClient.fetch(groq`*[_type == "ride"] | order(date desc){
     _id,
     _createdAt,
     passengers,
