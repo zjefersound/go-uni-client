@@ -1,3 +1,4 @@
+'use client';
 import Link from "next/link";
 import { AiOutlineCar, AiOutlineArrowLeft } from "react-icons/ai";
 
