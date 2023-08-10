@@ -42,7 +42,7 @@ export const Toast = ({
             <Icon
               className={clsx("mr-2", {
                 "text-emerald-600": type === "success",
-                "text-red-500": type === "error",
+                "text-red-600": type === "error",
                 "text-blue-500": type === "warning",
               })}
             />

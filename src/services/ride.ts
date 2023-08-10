@@ -1,5 +1,8 @@
 import { sanityClient } from "@/configs/sanity";
 import { IRide } from "@/models/IRide";
+import { IServiceOptions } from "@/models/IServiceOptions";
+import { dateToString } from "@/utils/dateToString";
+import { filtersToGroq } from "@/utils/filtersToGroq";
 import { groq } from "next-sanity";
 
 export interface IRidePayload {
@@ -48,9 +51,9 @@ const getToday: () => Promise<IRide> = () => {
 };
 
 const getRecents: () => Promise<IRide[]> = () => {
-  return sanityClient.fetch(groq`*[_type == "ride"][date != "${
-    new Date().toISOString().split("T")[0]
-  }"] | order(date desc)[0..2]{
+  return sanityClient.fetch(groq`*[_type == "ride"][date != "${dateToString(
+    new Date()
+  )}"] | order(date desc)[0..2]{
     _id,
     _createdAt,
     passengers,
@@ -69,8 +72,12 @@ const getRecents: () => Promise<IRide[]> = () => {
   }`);
 };
 
-const getAll: () => Promise<IRide[]> = () => {
-  return sanityClient.fetch(groq`*[_type == "ride"] | order(date desc){
+const getAll: (options?: IServiceOptions) => Promise<IRide[]> = ({
+  filters,
+} = {}) => {
+  return sanityClient.fetch(groq`*[_type == "ride"] ${filtersToGroq(
+    filters
+  )} | order(date desc){
     _id,
     _createdAt,
     passengers,
