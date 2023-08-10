@@ -4,7 +4,8 @@ import { AiOutlineUser, AiOutlineUserSwitch } from "react-icons/ai";
 import { Card } from "@/components/Card";
 import { Header } from "@/components/Header";
 import { rideService } from "@/services/ride";
-import { printDate, toCurrency } from "@/utils/formatters";
+import { toCurrency } from "@/utils/toCurrency";
+import { printDate } from "@/utils/printDate";
 import { calculateRideTotal } from "@/logic/calculateRideTotal";
 import Link from "next/link";
 

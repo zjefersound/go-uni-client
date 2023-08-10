@@ -5,7 +5,8 @@ import { urlFor } from "@/configs/sanity";
 import { calculateRideTotal } from "@/logic/calculateRideTotal";
 import { rideService } from "@/services/ride";
 import { arrayOfKeys } from "@/utils/arrayOfKeys";
-import { printDate, toCurrency } from "@/utils/formatters";
+import { toCurrency } from "@/utils/toCurrency";
+import { printDate } from "@/utils/printDate";
 import Link from "next/link";
 import {
   AiOutlineCalendar,

@@ -11,10 +11,11 @@ import { Card } from "@/components/Card";
 import { Header } from "@/components/Header";
 import { CardButton } from "@/components/CardButton";
 import { rideService } from "@/services/ride";
-import { printDate, toCurrency } from "@/utils/formatters";
+import { toCurrency } from "@/utils/toCurrency";
 import { calculateRideTotal } from "@/logic/calculateRideTotal";
 import { urlFor } from "@/configs/sanity";
 import Link from "next/link";
+import { printDate } from "@/utils/printDate";
 
 export default async function Home() {
   const todaysRide = await rideService.getToday();
