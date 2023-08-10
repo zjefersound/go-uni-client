@@ -6,7 +6,7 @@ import { calculateRideTotal } from "@/logic/calculateRideTotal";
 import { rideService } from "@/services/ride";
 import { arrayOfKeys } from "@/utils/arrayOfKeys";
 import { toCurrency } from "@/utils/toCurrency";
-import { printDate } from "@/utils/printDate";
+import { printDate } from "@/utils/date/printDate";
 import Link from "next/link";
 import {
   AiOutlineCalendar,

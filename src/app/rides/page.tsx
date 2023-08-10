@@ -5,7 +5,7 @@ import { Card } from "@/components/Card";
 import { Header } from "@/components/Header";
 import { rideService } from "@/services/ride";
 import { toCurrency } from "@/utils/toCurrency";
-import { printDate } from "@/utils/printDate";
+import { printDate } from "@/utils/date/printDate";
 import { calculateRideTotal } from "@/logic/calculateRideTotal";
 import Link from "next/link";
 

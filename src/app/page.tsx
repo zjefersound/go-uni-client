@@ -15,7 +15,7 @@ import { toCurrency } from "@/utils/toCurrency";
 import { calculateRideTotal } from "@/logic/calculateRideTotal";
 import { urlFor } from "@/configs/sanity";
 import Link from "next/link";
-import { printDate } from "@/utils/printDate";
+import { printDate } from "@/utils/date/printDate";
 
 export default async function Home() {
   const todaysRide = await rideService.getToday();

@@ -4,11 +4,11 @@ import { calculateRideTotal } from "@/logic/calculateRideTotal";
 import { ISanityFilter } from "@/models/ISanityFilter";
 import { fuelSupplyService } from "@/services/fuelSupply";
 import { rideService } from "@/services/ride";
-import { addDays } from "@/utils/addDays";
-import { dateToString } from "@/utils/dateToString";
+import { addDays } from "@/utils/date/addDays";
+import { dateToString } from "@/utils/date/dateToString";
 import { toCurrency } from "@/utils/toCurrency";
-import { printDate } from "@/utils/printDate";
-import { getPreviousMonday } from "@/utils/getPreviousMonday";
+import { printDate } from "@/utils/date/printDate";
+import { getPreviousMonday } from "@/utils/date/getPreviousMonday";
 import {
   AiOutlineArrowDown,
   AiOutlineArrowUp,

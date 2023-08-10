@@ -3,7 +3,7 @@ import {
   IValidationReturn,
 } from "@/models/IValidationReturn";
 import { IRidePayload } from "@/services/ride";
-import { stringToDate } from "@/utils/stringToDate";
+import { stringToDate } from "@/utils/date/stringToDate";
 
 export function isValidNewRide(ride: IRidePayload): IValidationReturn {
   const errors: IValidationError[] = [];

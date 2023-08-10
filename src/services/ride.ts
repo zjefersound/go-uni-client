@@ -1,7 +1,7 @@
 import { sanityClient } from "@/configs/sanity";
 import { IRide } from "@/models/IRide";
 import { IServiceOptions } from "@/models/IServiceOptions";
-import { dateToString } from "@/utils/dateToString";
+import { dateToString } from "@/utils/date/dateToString";
 import { filtersToGroq } from "@/utils/filtersToGroq";
 import { groq } from "next-sanity";
 

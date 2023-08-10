@@ -1,6 +1,6 @@
 import { IRide } from "@/models/IRide";
 import { arrayOfKeys } from "@/utils/arrayOfKeys";
-import { daysInMonth } from "@/utils/daysInMonth";
+import { daysInMonth } from "@/utils/date/daysInMonth";
 import clsx from "clsx";
 
 interface Props {
