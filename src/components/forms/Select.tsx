@@ -46,6 +46,7 @@ const SelectRoot = ({ value, defaultValue, children, placeholder, onChange }: Se
     </SelectPrimitive.Portal>
   </SelectPrimitive.Root>
 );
+SelectRoot.displayName = "Select.Root";
 
 const SelectItem = React.forwardRef(
   ({ children, className, ...props }: any, forwardedRef) => {
@@ -66,6 +67,8 @@ const SelectItem = React.forwardRef(
     );
   }
 );
+SelectItem.displayName = "Select.Item";
+
 
 export const Select = {
   Root: SelectRoot,
