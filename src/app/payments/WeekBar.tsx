@@ -19,7 +19,7 @@ export function WeekBar({ firstDate, rides = [] }: Props) {
           <span className="text-sm text-gray-400 mb-2">{dayInitials[index]}</span>
           <div
             className={clsx(
-              "h-[2.5rem] w-[2.5rem] rounded-full font-bold flex items-center justify-center border",
+              "h-[2.5rem] w-[2.5rem] rounded-full font-bold flex items-center justify-center border text-sm",
               {
                 "bg-emerald-100 text-emerald-600 border-emerald-300": rides[index]?.paid,
               },
@@ -31,9 +31,7 @@ export function WeekBar({ firstDate, rides = [] }: Props) {
               }
             )}
           >
-            {firstDay + index <= lastDay
-              ? firstDay + index
-              : (firstDay + index) % lastDay}
+            {(firstDay + index) % lastDay}
           </div>
         </li>
       ))}
