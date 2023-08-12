@@ -1,4 +1,3 @@
-'use client';
 import { Header } from "@/components/Header";
 import { carService } from "@/services/car";
 import { tripService } from "@/services/trip";
