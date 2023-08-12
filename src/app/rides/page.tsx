@@ -1,4 +1,3 @@
-"use client";
 import { AiOutlineUser, AiOutlineUserSwitch } from "react-icons/ai";
 
 import { Card } from "@/components/Card";

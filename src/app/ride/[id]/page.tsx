@@ -19,7 +19,6 @@ import { SwitchPaid } from "./SwitchPaid";
 import { fuelSupplyService } from "@/services/fuelSupply";
 import { ESTIMATED_FUEL_PRICE_PER_LITER } from "@/constants";
 import { calculateFuelCost } from "@/logic/calculateFuelCost";
-import { Skeleton } from "@/components/Skeleton";
 
 export default async function Ride({ params }: { params: { id: string } }) {
   const { id } = params;
