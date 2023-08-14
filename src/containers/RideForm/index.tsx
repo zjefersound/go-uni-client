@@ -61,126 +61,122 @@ export function RideForm({
   };
 
   return (
-    <>
-      <div className="space-y-3 flex flex-col">
-        <FormControl id="tripId" label="Trajeto" errors={errors}>
-          <SelectTrip
-            items={trips}
-            value={rideData.tripId}
-            onChange={(value) => handleChangeValue("tripId", value)}
+    <div className="space-y-3 flex flex-col">
+      <FormControl id="tripId" label="Trajeto" errors={errors}>
+        <SelectTrip
+          items={trips}
+          value={rideData.tripId}
+          onChange={(value) => handleChangeValue("tripId", value)}
+        />
+      </FormControl>
+      <FormControl id="carId" label="Carro" errors={errors}>
+        <SelectCar
+          items={cars}
+          value={rideData.carId}
+          onChange={(value) => handleChangeValue("carId", value)}
+        />
+      </FormControl>
+      <FormControl id="date" label="Data" errors={errors}>
+        <TextInput.Root>
+          <TextInput.Input
+            type="date"
+            value={rideData.date}
+            onChange={(e) => handleChangeValue("date", e.target.value)}
+            placeholder="mm/dd/yyyy"
           />
-        </FormControl>
-        <FormControl id="carId" label="Carro" errors={errors}>
-          <SelectCar
-            items={cars}
-            value={rideData.carId}
-            onChange={(value) => handleChangeValue("carId", value)}
+        </TextInput.Root>
+      </FormControl>
+      <FormControl id="passengers" label="Nº de passageiros" errors={errors}>
+        <TextInput.Root>
+          <TextInput.Input
+            type="number"
+            value={rideData.passengers}
+            onChange={(e) =>
+              handleChangeValue(
+                "passengers",
+                e.target.value ? Number(e.target.value) : ""
+              )
+            }
+            placeholder="0"
           />
-        </FormControl>
-        <FormControl id="date" label="Data" errors={errors}>
-          <TextInput.Root>
-            <TextInput.Input
-              type="date"
-              value={rideData.date}
-              onChange={(e) => handleChangeValue("date", e.target.value)}
-              placeholder="mm/dd/yyyy"
-            />
-          </TextInput.Root>
-        </FormControl>
-        <FormControl id="passengers" label="Nº de passageiros" errors={errors}>
-          <TextInput.Root>
-            <TextInput.Input
-              type="number"
-              value={rideData.passengers}
-              onChange={(e) =>
-                handleChangeValue(
-                  "passengers",
-                  e.target.value ? Number(e.target.value) : ""
-                )
-              }
-              placeholder="0"
-            />
-          </TextInput.Root>
-        </FormControl>
-        <FormControl
-          id="passengersOneWay"
-          label="Apenas ida ou volta"
-          errors={errors}
-        >
-          <TextInput.Root>
-            <TextInput.Input
-              type="number"
-              value={rideData.passengersOneWay}
-              onChange={(e) =>
-                handleChangeValue(
-                  "passengersOneWay",
-                  e.target.value ? Number(e.target.value) : ""
-                )
-              }
-              placeholder="0"
-            />
-          </TextInput.Root>
-        </FormControl>
-        <FormControl
-          id="pricePerPassenger"
-          label="Preço por passageiro"
-          errors={errors}
-        >
-          <TextInput.Root>
-            <TextInput.Icon>
-              <AiOutlineDollar />
-            </TextInput.Icon>
-            <TextInput.Currency
-              placeholder="0,00"
-              intlConfig={{ locale: "pt-BR", currency: "BRL" }}
-              defaultValue={rideData.pricePerPassenger}
-              decimalsLimit={2}
-              onValueChange={(_, name, values) =>
-                handleChangeValue("pricePerPassenger", values?.float || 0)
-              }
-              required
-            />
-          </TextInput.Root>
-        </FormControl>
-        <FormControl id="extraCosts" label="Custos extras" errors={errors}>
-          <TextInput.Root>
-            <TextInput.Icon>
-              <AiOutlineDollar />
-            </TextInput.Icon>
-            <TextInput.Currency
-              placeholder="0,00"
-              intlConfig={{ locale: "pt-BR", currency: "BRL" }}
-              defaultValue={rideData.extraCosts}
-              decimalsLimit={2}
-              onValueChange={(_, name, values) =>
-                handleChangeValue("extraCosts", values?.float || 0)
-              }
-              required
-            />
-          </TextInput.Root>
-        </FormControl>
-        <FormControl id="observations" label="Observações" errors={errors}>
-          <TextInput.Root>
-            <TextInput.Input
-              value={rideData.observations}
-              onChange={(e) =>
-                handleChangeValue("observations", e.target.value)
-              }
-              placeholder="Digite alguma informação adicional..."
-            />
-          </TextInput.Root>
-        </FormControl>
-        <FormControl id="paid" label="Pago" errors={errors}>
-          <Switch
-            value={rideData.paid}
-            onChange={(value) => handleChangeValue("paid", !rideData.paid)}
+        </TextInput.Root>
+      </FormControl>
+      <FormControl
+        id="passengersOneWay"
+        label="Apenas ida ou volta"
+        errors={errors}
+      >
+        <TextInput.Root>
+          <TextInput.Input
+            type="number"
+            value={rideData.passengersOneWay}
+            onChange={(e) =>
+              handleChangeValue(
+                "passengersOneWay",
+                e.target.value ? Number(e.target.value) : ""
+              )
+            }
+            placeholder="0"
           />
-        </FormControl>
-        <Button onClick={handleSubmit} disabled={loading}>
-          {loading && <Loading className="mr-2" size="sm" />}
-          {submitText}
-        </Button>
-      </div>
-    </>
+        </TextInput.Root>
+      </FormControl>
+      <FormControl
+        id="pricePerPassenger"
+        label="Preço por passageiro"
+        errors={errors}
+      >
+        <TextInput.Root>
+          <TextInput.Icon>
+            <AiOutlineDollar />
+          </TextInput.Icon>
+          <TextInput.Currency
+            placeholder="0,00"
+            intlConfig={{ locale: "pt-BR", currency: "BRL" }}
+            defaultValue={rideData.pricePerPassenger}
+            decimalsLimit={2}
+            onValueChange={(_, name, values) =>
+              handleChangeValue("pricePerPassenger", values?.float || 0)
+            }
+            required
+          />
+        </TextInput.Root>
+      </FormControl>
+      <FormControl id="extraCosts" label="Custos extras" errors={errors}>
+        <TextInput.Root>
+          <TextInput.Icon>
+            <AiOutlineDollar />
+          </TextInput.Icon>
+          <TextInput.Currency
+            placeholder="0,00"
+            intlConfig={{ locale: "pt-BR", currency: "BRL" }}
+            defaultValue={rideData.extraCosts}
+            decimalsLimit={2}
+            onValueChange={(_, name, values) =>
+              handleChangeValue("extraCosts", values?.float || 0)
+            }
+            required
+          />
+        </TextInput.Root>
+      </FormControl>
+      <FormControl id="observations" label="Observações" errors={errors}>
+        <TextInput.Root>
+          <TextInput.Input
+            value={rideData.observations}
+            onChange={(e) => handleChangeValue("observations", e.target.value)}
+            placeholder="Digite alguma informação adicional..."
+          />
+        </TextInput.Root>
+      </FormControl>
+      <FormControl id="paid" label="Pago" errors={errors}>
+        <Switch
+          value={rideData.paid}
+          onChange={(value) => handleChangeValue("paid", !rideData.paid)}
+        />
+      </FormControl>
+      <Button onClick={handleSubmit} disabled={loading}>
+        {loading && <Loading className="mr-2" size="sm" />}
+        {submitText}
+      </Button>
+    </div>
   );
 }

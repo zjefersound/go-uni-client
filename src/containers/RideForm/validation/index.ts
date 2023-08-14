@@ -3,7 +3,6 @@ import {
   IValidationReturn,
 } from "@/models/IValidationReturn";
 import { IRidePayload } from "@/services/ride";
-import { stringToDate } from "@/utils/date/stringToDate";
 
 export function isValidNewRide(ride: IRidePayload): IValidationReturn {
   const errors: IValidationError[] = [];
@@ -11,7 +10,7 @@ export function isValidNewRide(ride: IRidePayload): IValidationReturn {
     errors.push({ field: "tripId", message: "Selecione um trajeto" });
   }
   if (!ride.carId) {
-    errors.push({ field: "carId", message: "Selecione um carro." });
+    errors.push({ field: "carId", message: "Selecione um carro" });
   }
   if (!ride.date) {
     errors.push({ field: "date", message: "Insira uma data" });
