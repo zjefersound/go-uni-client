@@ -18,6 +18,8 @@ import { PiGasPump } from "react-icons/pi";
 import { WeekBar } from "./WeekBar";
 import { reverseArray } from "@/utils/reverseArray";
 
+export const dynamic = "force-dynamic";
+
 export default async function Payments() {
   const previousMonday = getPreviousMonday();
   const startDate = dateToString(previousMonday);

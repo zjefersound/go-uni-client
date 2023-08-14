@@ -8,6 +8,8 @@ import { printDate } from "@/utils/date/printDate";
 import { calculateRideTotal } from "@/logic/calculateRideTotal";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default async function Rides() {
   const rides = await rideService.getAll();
   return (

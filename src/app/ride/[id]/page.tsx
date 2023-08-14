@@ -20,6 +20,8 @@ import { fuelSupplyService } from "@/services/fuelSupply";
 import { ESTIMATED_FUEL_PRICE_PER_LITER } from "@/constants";
 import { calculateFuelCost } from "@/logic/calculateFuelCost";
 
+export const dynamic = "force-dynamic";
+
 export default async function Ride({ params }: { params: { id: string } }) {
   const { id } = params;
   const ride = await rideService.getById(id);
