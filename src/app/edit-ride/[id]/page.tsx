@@ -4,6 +4,8 @@ import { tripService } from "@/services/trip";
 import { UpdateRideForm } from "./UpdateRideForm";
 import { rideService } from "@/services/ride";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditRide({ params }: { params: { id: string } }) {
   const { id } = params;
   const ride = await rideService.getById(id);

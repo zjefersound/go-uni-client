@@ -16,6 +16,8 @@ import { urlFor } from "@/configs/sanity";
 import Link from "next/link";
 import { printDate } from "@/utils/date/printDate";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const todaysRide = await rideService.getToday();
   const rides = await rideService.getRecents();
