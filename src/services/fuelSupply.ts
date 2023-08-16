@@ -11,7 +11,7 @@ const getAll: (options?: IServiceOptions) => Promise<IFuelSupply[]> = ({ filters
 };
 
 const getLastUntilDate: (date: string) => Promise<IFuelSupply> = (date) => {
-  return sanityClient.fetch(groq`*[_type == "fuelSupply"][date <= "${date}"][0]{
+  return sanityClient.fetch(groq`*[_type == "fuelSupply"][date <= "${date}"] | order(date desc)[0]{
     ...
   }`);
 };
