@@ -15,6 +15,7 @@ import { calculateRideTotal } from "@/logic/calculateRideTotal";
 import { urlFor } from "@/configs/sanity";
 import Link from "next/link";
 import { printDate } from "@/utils/date/printDate";
+import { Content } from "@/components/Content";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,7 @@ export default async function Home() {
   return (
     <main>
       <Header />
-      <div className="p-3 flex flex-col space-y-3">
+      <Content>
         {todaysRide && (
           <Link href={`/ride/${todaysRide._id}`}>
             <Card>
@@ -106,7 +107,7 @@ export default async function Home() {
             </li>
           ))}
         </ul>
-      </div>
+      </Content>
     </main>
   );
 }

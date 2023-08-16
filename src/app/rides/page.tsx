@@ -7,6 +7,7 @@ import { toCurrency } from "@/utils/toCurrency";
 import { printDate } from "@/utils/date/printDate";
 import { calculateRideTotal } from "@/logic/calculateRideTotal";
 import Link from "next/link";
+import { Content } from "@/components/Content";
 
 export const dynamic = "force-dynamic";
 
@@ -15,7 +16,7 @@ export default async function Rides() {
   return (
     <main>
       <Header title="Caronas" goBackHref="/" />
-      <div className="p-3 flex flex-col space-y-3">
+      <Content>
         <h2 className="font-bold">Todas as caronas:</h2>
 
         <ul className="space-y-2">
@@ -50,7 +51,7 @@ export default async function Rides() {
             </li>
           ))}
         </ul>
-      </div>
+      </Content>
     </main>
   );
 }

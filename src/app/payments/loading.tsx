@@ -5,9 +5,10 @@ export default function Loading() {
     <>
       <Skeleton className="h-32" />
       <Skeleton className="h-28" />
-      <Skeleton className="h-32" />
-      <Skeleton className="h-28" />
-      <Skeleton className="h-48" />
+      <Skeleton className="h-10" />
+      <Skeleton className="h-10" />
+      <Skeleton className="h-10" />
+      <Skeleton className="h-10" />
     </>
   );
 }
