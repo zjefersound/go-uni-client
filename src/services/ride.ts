@@ -144,12 +144,14 @@ const patch = (id: string, ride: IRidePatchPayload) => {
       _ref: ride.tripId,
       _type: "reference",
     };
+    delete ride.tripId;
   }
   if (ride.carId) {
     payload.car = {
       _ref: ride.carId,
       _type: "reference",
     };
+    delete ride.carId;
   }
   return sanityClient.patch(id).set(payload).commit();
 };
