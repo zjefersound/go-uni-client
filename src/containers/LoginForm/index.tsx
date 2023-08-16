@@ -63,6 +63,7 @@ export function LoginForm({ submitText, onSubmit }: Props) {
             <AiOutlineLock />
           </TextInput.Icon>
           <TextInput.Input
+          type="password"
             value={data.password}
             onChange={(e) => handleChangeValue("password", e.target.value)}
             placeholder="******"

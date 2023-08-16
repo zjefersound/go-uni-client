@@ -12,7 +12,7 @@ export function Button({ children, onClick, className, ...props }: Props) {
   return (
     <button
       className={
-        "flex justify-center items-center bg-neutral-800 hover:bg-neutral-700 active::bg-neutral-600 transition text-white font-bold p-2 rounded " +
+        "flex justify-center items-center bg-neutral-800 hover:bg-neutral-700 active::bg-neutral-600 transition text-white font-bold p-2 rounded disabled:opacity-75 " +
         className
       }
       onClick={onClick}

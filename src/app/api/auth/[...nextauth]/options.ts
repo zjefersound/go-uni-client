@@ -1,8 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { verifyPassword } from "./functions/verifyPassword";
-import { userService } from "@/services/user";
+import { authorize } from "./functions/authorize";
 
 export const nextAuthOptions: NextAuthOptions = {
   providers: [
@@ -24,34 +23,30 @@ export const nextAuthOptions: NextAuthOptions = {
           placeholder: "Digite sua senha",
         },
       },
-      async authorize(credentials) {
-        if (!credentials?.username || !credentials?.password) return null;
-
-        const authorizedId = await verifyPassword(
-          credentials.username,
-          credentials.password
-        );
-
-        if (authorizedId) {
-          const user = await userService.getById(authorizedId);
-          return {
-            id: user._id,
-            email: user.email,
-            image: user.avatar,
-            name: user.name,
-          } as any;
-        } else {
-          return null;
-        }
-      },
+      authorize,
     }),
   ],
   session: {
     strategy: "jwt",
   },
+  callbacks: {
+    session: async ({ session, token }) => {
+      if (session?.user) {
+        session.user.id = token.uid;
+      }
+      return session;
+    },
+    jwt: async ({ user, token }) => {
+      if (user) {
+        token.uid = user.id;
+      }
+      return token;
+    },
+  },
+
   secret: process.env.NEXTAUTH_SECRET,
 
-  // pages: {
-  //   signIn: "/signin",
-  // },
+  pages: {
+    signIn: '/login'
+  },
 };
