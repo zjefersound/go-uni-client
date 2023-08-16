@@ -10,7 +10,7 @@ interface Props {
 }
 export function CardButton({ onClick, children, href }: Props) {
   const Element = href ? Link : "button";
-  const clickProps = href ? { href } : onClick;
+  const clickProps = href ? { href } : { onClick };
   return (
     <Element
       className="
@@ -22,7 +22,7 @@ export function CardButton({ onClick, children, href }: Props) {
         flex flex-1 flex-col items-center justify-center 
         h-[5rem] 
         text-sm font-semibold text-gray-700"
-      {...clickProps}
+      {...clickProps as any}
     >
       {children}
     </Element>

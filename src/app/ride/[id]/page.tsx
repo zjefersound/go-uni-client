@@ -29,7 +29,7 @@ export default async function Ride({ params }: { params: { id: string } }) {
   const fuelPrice =
     lastFuelSupply?.pricePerLiter || ESTIMATED_FUEL_PRICE_PER_LITER;
   return (
-    <div className="p-3 flex flex-col space-y-3">
+    <>
       <Card>
         <div className="flex justify-between mt-3 space-x-3">
           <div>
@@ -184,6 +184,6 @@ export default async function Ride({ params }: { params: { id: string } }) {
           </div>
         </div>
       </Card>
-    </div>
+    </>
   );
 }

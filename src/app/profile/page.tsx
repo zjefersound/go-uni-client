@@ -1,6 +1,7 @@
 "use client";
 import { ButtonOutlined } from "@/components/ButtonOutlined";
 import { Card } from "@/components/Card";
+import { Content } from "@/components/Content";
 import { Header } from "@/components/Header";
 import { Skeleton } from "@/components/Skeleton";
 import { urlFor } from "@/configs/sanity";
@@ -13,14 +14,10 @@ export default function Profile() {
   const router = useRouter();
   const { data: session } = useSession();
 
-  function signOutHandler() {
-    router.push("/api/auth/federated-sign-out");
-  }
-
   return (
     <main>
       <Header title="Perfil" goBackHref="/" />
-      <div className="p-3 flex flex-col space-y-3">
+      <Content>
         {session?.user ? (
           <Card>
             <img
@@ -31,7 +28,9 @@ export default function Profile() {
             <p className="font-bold mt-3">{session.user.name}</p>
             <p className="text-sm text-gray-600">{session.user.email}</p>
           </Card>
-        ) : <Skeleton className="h-52" />}
+        ) : (
+          <Skeleton className="h-52" />
+        )}
 
         <ButtonOutlined
           type="danger"
@@ -44,7 +43,7 @@ export default function Profile() {
           <AiOutlineLogout className="mr-2" />
           Sair
         </ButtonOutlined>
-      </div>
+      </Content>
     </main>
   );
 }

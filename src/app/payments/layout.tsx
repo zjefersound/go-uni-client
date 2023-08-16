@@ -4,7 +4,7 @@ import { Header } from "@/components/Header";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <main>
-      <Header title="Carona" goBackHref="/" />
+      <Header title="Pagamentos" goBackHref="/" />
       <Content>{children}</Content>
     </main>
   );
