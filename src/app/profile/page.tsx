@@ -36,7 +36,7 @@ export default function Profile() {
           type="danger"
           onClick={() =>
             signOut({ redirect: false }).then(() => {
-              router.push("/");
+              router.push("/login");
             })
           }
         >

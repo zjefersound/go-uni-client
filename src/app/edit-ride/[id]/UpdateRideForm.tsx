@@ -27,7 +27,10 @@ export function UpdateRideForm({ ride, cars, trips }: Props) {
           type: "success",
         });
       })
-      .then(() => router.push(`/ride/${ride._id}`))
+      .then(() => {
+        router.push(`/ride/${ride._id}`)
+        router.refresh()
+      })
       .catch((error) => {
         launchToast({
           open: true,
