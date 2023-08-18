@@ -6,7 +6,10 @@ import { groq } from "next-sanity";
 
 const getAll: (options?: IServiceOptions) => Promise<IFuelSupply[]> = ({ filters } = {}) => {
   return sanityClient.fetch(groq`*[_type == "fuelSupply"] ${filtersToGroq(filters)} | order(date desc) {
-    ...
+    ...,
+    car -> {
+      ...
+    }
   }`);
 };
 
