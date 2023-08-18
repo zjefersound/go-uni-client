@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { TextInput } from "@/components/forms/TextInput";
 import { AiOutlineUser, AiOutlineLock } from "react-icons/ai";
 import { Button } from "@/components/Button";
@@ -30,7 +30,8 @@ export function LoginForm({ submitText, onSubmit }: Props) {
     setErrors(newErrors);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     setLoading(true);
     const { isValid, errors: newErrors } = isValidLogin(data);
 
@@ -44,7 +45,7 @@ export function LoginForm({ submitText, onSubmit }: Props) {
   };
 
   return (
-    <div className="space-y-3 flex flex-col">
+    <form className="space-y-3 flex flex-col" onSubmit={handleSubmit}>
       <FormControl id="username" label="Username" errors={errors}>
         <TextInput.Root>
           <TextInput.Icon>
@@ -54,6 +55,7 @@ export function LoginForm({ submitText, onSubmit }: Props) {
             value={data.username}
             onChange={(e) => handleChangeValue("username", e.target.value)}
             placeholder="Digite o username..."
+            required
           />
         </TextInput.Root>
       </FormControl>
@@ -63,17 +65,18 @@ export function LoginForm({ submitText, onSubmit }: Props) {
             <AiOutlineLock />
           </TextInput.Icon>
           <TextInput.Input
-          type="password"
+            type="password"
             value={data.password}
             onChange={(e) => handleChangeValue("password", e.target.value)}
             placeholder="******"
+            required
           />
         </TextInput.Root>
       </FormControl>
-      <Button onClick={handleSubmit} disabled={loading}>
+      <Button disabled={loading}>
         {loading && <Loading className="mr-2" size="sm" />}
         {submitText}
       </Button>
-    </div>
+    </form>
   );
 }

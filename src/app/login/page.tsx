@@ -22,6 +22,7 @@ export default function Login() {
 
       if (!res?.error) {
         router.push(callbackUrl);
+        router.refresh();
       } else {
         launchToast({
           open: true,
