@@ -13,7 +13,7 @@ export function Switch({ value, onChange, className }: SwitchProps) {
   return (
     <SwitchPrimitive.Root
       className={clsx(
-        `w-[3rem] h-[1.75rem] block px-1 rounded-full border-[1px] relative shrink-0 transition ${className}`,
+        `w-[3rem] h-[1.75rem] block px-1 rounded-full border-[1px] shrink-0 transition ${className}`,
         {
           "bg-emerald-600": value,
         },

@@ -3,12 +3,14 @@ import { Switch } from "@/components/forms/Switch";
 import { useToast } from "@/hooks/useToast";
 import { IRide } from "@/models/IRide";
 import { rideService } from "@/services/ride";
+import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
 interface Props {
   ride: IRide;
 }
 export function SwitchPaid({ ride }: Props) {
+  const router = useRouter();
   const { launchToast } = useToast();
   const [isPaid, setIsPaid] = useState(ride.paid);
 
@@ -24,6 +26,7 @@ export function SwitchPaid({ ride }: Props) {
           description: "",
           type: "success",
         });
+        router.refresh();
       })
       .catch((error) => {
         launchToast({
