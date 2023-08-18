@@ -1,9 +1,9 @@
 "use client";
 import { FormEvent, useState } from "react";
-import { SelectTrip } from "./components/SelectTrip";
+import { SelectTrip } from "../components/SelectTrip";
 import { ITrip } from "@/models/ITrip";
 import { ICar } from "@/models/ICar";
-import { SelectCar } from "./components/SelectCar";
+import { SelectCar } from "../components/SelectCar";
 import { TextInput } from "@/components/forms/TextInput";
 import { AiOutlineDollar } from "react-icons/ai";
 import { Switch } from "@/components/forms/Switch";
