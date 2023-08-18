@@ -26,6 +26,7 @@ export function CreateRideForm({ trips, cars }: Props) {
           type: "success",
         });
         router.push("/");
+        router.refresh();
       })
       .catch((error) => {
         launchToast({
