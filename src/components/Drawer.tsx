@@ -12,7 +12,7 @@ function DrawerRoot({ children, open }: DrawerRootProps) {
   return (
     <div
       className={clsx(
-        "fixed h-full w-full bg-white top-0 left-0 transition-all z-50",
+        "fixed h-full w-full bg-white top-0 left-0 transition-all z-50 flex flex-col",
         {
           "translate-x-full": !open,
         }
