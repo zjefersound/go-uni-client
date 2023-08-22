@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { ReactNode } from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import clsx from "clsx";
@@ -10,10 +10,23 @@ export interface SelectRootProps {
   defaultValue?: string;
   value: string;
   onChange: (value: string) => void;
+  required?: boolean;
 }
 
-const SelectRoot = ({ value, defaultValue, children, placeholder, onChange }: SelectRootProps) => (
-  <SelectPrimitive.Root defaultValue={defaultValue} value={value}  onValueChange={onChange}>
+const SelectRoot = ({
+  value,
+  defaultValue,
+  children,
+  placeholder,
+  onChange,
+  required,
+}: SelectRootProps) => (
+  <SelectPrimitive.Root
+    defaultValue={defaultValue}
+    value={value}
+    onValueChange={onChange}
+    required={required}
+  >
     <SelectPrimitive.Trigger
       className="h-12
       flex items-center space-x-2
@@ -36,9 +49,7 @@ const SelectRoot = ({ value, defaultValue, children, placeholder, onChange }: Se
         <SelectPrimitive.ScrollUpButton className="flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default">
           <RxChevronUp />
         </SelectPrimitive.ScrollUpButton>
-        <SelectPrimitive.Viewport>
-          {children}
-        </SelectPrimitive.Viewport>
+        <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
         <SelectPrimitive.ScrollDownButton className="flex items-center justify-center h-[25px] bg-white text-violet11 cursor-default">
           <RxChevronDown />
         </SelectPrimitive.ScrollDownButton>
@@ -69,8 +80,7 @@ const SelectItem = React.forwardRef(
 );
 SelectItem.displayName = "Select.Item";
 
-
 export const Select = {
   Root: SelectRoot,
-  Item: SelectItem
-}
+  Item: SelectItem,
+};

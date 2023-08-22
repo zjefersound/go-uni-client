@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
-import { SelectTrip } from "./components/SelectTrip";
+import { FormEvent, useState } from "react";
+import { SelectTrip } from "../components/SelectTrip";
 import { ITrip } from "@/models/ITrip";
 import { ICar } from "@/models/ICar";
-import { SelectCar } from "./components/SelectCar";
+import { SelectCar } from "../components/SelectCar";
 import { TextInput } from "@/components/forms/TextInput";
 import { AiOutlineDollar } from "react-icons/ai";
 import { Switch } from "@/components/forms/Switch";
@@ -47,7 +47,8 @@ export function RideForm({
     setErrors(newErrors);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     setLoading(true);
     const { isValid, errors: newErrors } = isValidNewRide(rideData);
 
@@ -61,12 +62,13 @@ export function RideForm({
   };
 
   return (
-    <div className="space-y-3 flex flex-col">
+    <form className="space-y-3 flex flex-col" onSubmit={handleSubmit}>
       <FormControl id="tripId" label="Trajeto" errors={errors}>
         <SelectTrip
           items={trips}
           value={rideData.tripId}
           onChange={(value) => handleChangeValue("tripId", value)}
+          required
         />
       </FormControl>
       <FormControl id="carId" label="Carro" errors={errors}>
@@ -74,6 +76,7 @@ export function RideForm({
           items={cars}
           value={rideData.carId}
           onChange={(value) => handleChangeValue("carId", value)}
+          required
         />
       </FormControl>
       <FormControl id="date" label="Data" errors={errors}>
@@ -83,6 +86,7 @@ export function RideForm({
             value={rideData.date}
             onChange={(e) => handleChangeValue("date", e.target.value)}
             placeholder="mm/dd/yyyy"
+            required
           />
         </TextInput.Root>
       </FormControl>
@@ -98,6 +102,9 @@ export function RideForm({
               )
             }
             placeholder="0"
+            required
+            min={0}
+            max={4}
           />
         </TextInput.Root>
       </FormControl>
@@ -117,6 +124,8 @@ export function RideForm({
               )
             }
             placeholder="0"
+            min={0}
+            max={4}
           />
         </TextInput.Root>
       </FormControl>
@@ -154,7 +163,6 @@ export function RideForm({
             onValueChange={(_, name, values) =>
               handleChangeValue("extraCosts", values?.float || 0)
             }
-            required
           />
         </TextInput.Root>
       </FormControl>
@@ -173,10 +181,10 @@ export function RideForm({
           onChange={(value) => handleChangeValue("paid", !rideData.paid)}
         />
       </FormControl>
-      <Button onClick={handleSubmit} disabled={loading}>
+      <Button disabled={loading}>
         {loading && <Loading className="mr-2" size="sm" />}
         {submitText}
       </Button>
-    </div>
+    </form>
   );
 }

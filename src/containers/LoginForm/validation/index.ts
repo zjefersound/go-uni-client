@@ -6,7 +6,7 @@ import { ILoginPayload } from "..";
 
 export function isValidLogin(ride: ILoginPayload): IValidationReturn {
   const errors: IValidationError[] = [];
-  if (!ride.username) {
+  if (!ride.username.trim()) {
     errors.push({ field: "username", message: "Digite o username" });
   }
   if (!ride.password) {

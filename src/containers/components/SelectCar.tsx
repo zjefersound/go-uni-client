@@ -6,13 +6,15 @@ interface Props {
   value: string;
   onChange: (value: string) => void;
   items: ICar[];
+  required?: boolean;
 }
 
-export const SelectCar = ({ items, value, onChange }: Props) => (
+export const SelectCar = ({ items, value, onChange, required }: Props) => (
   <Select.Root
     placeholder="Selecione o carro..."
     value={value}
     onChange={onChange}
+    required={required}
   >
     {items.map((item) => (
       <Select.Item
