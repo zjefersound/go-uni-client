@@ -5,6 +5,7 @@ import { printDate } from "@/utils/date/printDate";
 import { PiGasPump } from "react-icons/pi";
 import { CardButton } from "@/components/CardButton";
 import { AiOutlinePlus } from "react-icons/ai";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -16,24 +17,33 @@ export default async function FuelSupplies() {
         <AiOutlinePlus className="h-8 w-8 text-emerald-600" /> Novo
         abastecimento
       </CardButton>
-      {fuelSupplies.map((fuelSupply) => (
-        <Card key={fuelSupply._id}>
-          <div className="flex items-center">
-            <PiGasPump className="text-red-600 h-5 w-5 mr-3" />
-
-            <p className="text-sm text-gray-600 mr-auto">
-              {printDate(fuelSupply.date)}
-            </p>
-            <p className="text-sm text-gray-600 mr-3">{fuelSupply.car.model}</p>
-            <p className="text-sm text-gray-600 mr-3">
-              {toCurrency(fuelSupply.pricePerLiter)}/L
-            </p>
-            <p className="text-sm text-red-600 font-bold">
-              {toCurrency(fuelSupply.price)}
-            </p>
-          </div>
-        </Card>
-      ))}
+      <ul className="space-y-2">
+        {fuelSupplies.map((fuelSupply) => (
+          <li key={fuelSupply._id}>
+            <Link href={`/edit-fuel-supply/${fuelSupply._id}`}>
+            <Card>
+              <div className="flex items-center">
+                <PiGasPump className="text-red-600 h-5 w-5 mr-3" />
+                <div className="mr-auto">
+                  <p className="text-sm text-gray-600">
+                    {printDate(fuelSupply.date)}
+                  </p>
+                  <p className="text-xs text-gray-600 mr-3">
+                    {fuelSupply.car.model}
+                  </p>
+                </div>
+                <p className="text-sm text-gray-600 mr-3">
+                  {toCurrency(fuelSupply.pricePerLiter)}/L
+                </p>
+                <p className="text-sm text-red-600 font-bold">
+                  {toCurrency(fuelSupply.price)}
+                </p>
+              </div>
+            </Card>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </>
   );
 }
