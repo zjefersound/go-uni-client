@@ -1,12 +1,11 @@
 {
-  "name": "GoUNI",
-  "short_name": "GoUNI",
   "theme_color": "#059669",
   "background_color": "#fff",
   "display": "standalone",
   "scope": "/",
-  "start_url": "/",
-  "orientation": "portrait",
+  "start_url": ".",
+  "name": "GoUNI",
+  "short_name": "GoUNI",
   "icons": [
     {
       "src": "/icon-72x72.png",
