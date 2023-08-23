@@ -68,6 +68,9 @@ const patch = (id: string, fuelSupply: IFuelSupplyPayload) => {
   }
   return sanityClient.patch(id).set(payload).commit();
 };
+const handleDelete = (id: string) => {
+  return sanityClient.delete(id);
+};
 
 export const fuelSupplyService = {
   getAll,
@@ -75,4 +78,5 @@ export const fuelSupplyService = {
   getLastUntilDate,
   create,
   patch,
+  delete: handleDelete,
 };
