@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "GoUni",
   description: "Ride app for college students",
   manifest: '/manifest.json',
+  themeColor: '#059669'
 };
 
 export default function RootLayout({
