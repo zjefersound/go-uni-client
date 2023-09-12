@@ -1,3 +1,4 @@
+import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessionUser";
 import { sanityClient } from "@/configs/sanity";
 import { IRide } from "@/models/IRide";
 import { IServiceOptions } from "@/models/IServiceOptions";
@@ -28,10 +29,11 @@ export interface IRidePatchPayload {
   observations?: string;
 }
 
-const getToday: () => Promise<IRide> = () => {
+const getToday: () => Promise<IRide> = async() => {
+  const user = await getSessionUser();
   return sanityClient.fetch(groq`*[_type == "ride"][date == "${
     new Date().toISOString().split("T")[0]
-  }"][0]{
+  }"][driver._ref == "${user.id}"][0]{
     _id,
     _createdAt,
     passengers,
@@ -50,10 +52,11 @@ const getToday: () => Promise<IRide> = () => {
   }`);
 };
 
-const getRecents: () => Promise<IRide[]> = () => {
+const getRecents: () => Promise<IRide[]> = async () => {
+  const user = await getSessionUser();
   return sanityClient.fetch(groq`*[_type == "ride"][date != "${dateToString(
     new Date()
-  )}"] | order(date desc)[0..2]{
+  )}"][driver._ref == "${user.id}"] | order(date desc)[0..3]{
     _id,
     _createdAt,
     passengers,
@@ -72,12 +75,13 @@ const getRecents: () => Promise<IRide[]> = () => {
   }`);
 };
 
-const getAll: (options?: IServiceOptions) => Promise<IRide[]> = ({
+const getAll: (options?: IServiceOptions) => Promise<IRide[]> = async ({
   filters,
 } = {}) => {
-  return sanityClient.fetch(groq`*[_type == "ride"] ${filtersToGroq(
-    filters
-  )} | order(date desc){
+  const user = await getSessionUser();
+  return sanityClient.fetch(groq`*[_type == "ride"][driver._ref == "${
+    user.id
+  }"] ${filtersToGroq(filters)} | order(date desc){
     _id,
     _createdAt,
     passengers,
