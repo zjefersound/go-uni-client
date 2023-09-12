@@ -4,16 +4,14 @@ import { tripService } from "@/services/trip";
 import { UpdateRideForm } from "./UpdateRideForm";
 import { rideService } from "@/services/ride";
 import { Content } from "@/components/Content";
-import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessionUser";
 
 export const dynamic = "force-dynamic";
 
 export default async function EditRide({ params }: { params: { id: string } }) {
   const { id } = params;
-  const user = await getSessionUser();
   const ride = await rideService.getById(id);
   const trips = await tripService.getAll();
-  const cars = await carService.getAll({ userId: user?.id });
+  const cars = await carService.getAll();
 
   return (
     <main>

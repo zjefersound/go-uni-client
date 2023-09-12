@@ -3,7 +3,6 @@ import { carService } from "@/services/car";
 import { UpdateFuelSupplyForm } from "./UpdateFuelSupplyForm";
 import { fuelSupplyService } from "@/services/fuelSupply";
 import { Content } from "@/components/Content";
-import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessionUser";
 
 export const dynamic = "force-dynamic";
 
@@ -13,9 +12,8 @@ export default async function EditFuelSupply({
   params: { id: string };
 }) {
   const { id } = params;
-  const user = await getSessionUser();
   const fuelSupply = await fuelSupplyService.getById(id);
-  const cars = await carService.getAll({ userId: user?.id });
+  const cars = await carService.getAll();
 
   return (
     <main>

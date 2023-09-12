@@ -3,12 +3,10 @@ import { carService } from "@/services/car";
 import { tripService } from "@/services/trip";
 import { CreateRideForm } from "./CreateRideForm";
 import { Content } from "@/components/Content";
-import { getSessionUser } from "../api/auth/[...nextauth]/functions/getSessionUser";
 
 export default async function NewRide() {
-  const user = await getSessionUser();
   const trips = await tripService.getAll();
-  const cars = await carService.getAll({ userId: user?.id });
+  const cars = await carService.getAll();
 
   return (
     <main>

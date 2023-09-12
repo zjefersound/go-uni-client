@@ -1,3 +1,4 @@
+import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessionUser";
 import { sanityClient } from "@/configs/sanity";
 import { IFuelSupply } from "@/models/IFuelSupply";
 import { IServiceOptions } from "@/models/IServiceOptions";
@@ -11,12 +12,13 @@ export interface IFuelSupplyPayload {
   pricePerLiter: number;
 }
 
-const getAll: (options?: IServiceOptions) => Promise<IFuelSupply[]> = ({
+const getAll: (options?: IServiceOptions) => Promise<IFuelSupply[]> = async ({
   filters,
 } = {}) => {
-  return sanityClient.fetch(groq`*[_type == "fuelSupply"] ${filtersToGroq(
-    filters
-  )} | order(date desc) {
+  const user = await getSessionUser();
+  return sanityClient.fetch(groq`*[_type == "fuelSupply" && car._ref in *[_type=="car" && owner._ref=="${
+    user.id
+  }"]._id ] ${filtersToGroq(filters)} | order(date desc) {
     ...,
     car -> {
       ...
@@ -37,8 +39,11 @@ const getById: (id: string) => Promise<IFuelSupply> = (id) => {
   }`);
 };
 
-const getLastUntilDate: (date: string) => Promise<IFuelSupply> = (date) => {
-  return sanityClient.fetch(groq`*[_type == "fuelSupply"][date <= "${date}"] | order(date desc)[0]{
+const getLastUntilDate: (date: string) => Promise<IFuelSupply> = async (
+  date
+) => {
+  const user = await getSessionUser();
+  return sanityClient.fetch(groq`*[_type == "fuelSupply" && car._ref in *[_type=="car" && owner._ref=="${user.id}"]._id][date <= "${date}"] | order(date desc)[0]{
     ...
   }`);
 };

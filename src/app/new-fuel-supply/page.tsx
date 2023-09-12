@@ -2,11 +2,9 @@ import { Header } from "@/components/Header";
 import { carService } from "@/services/car";
 import { Content } from "@/components/Content";
 import { CreateFuelSupplyForm } from "./CreateFuelSupplyForm";
-import { getSessionUser } from "../api/auth/[...nextauth]/functions/getSessionUser";
 
 export default async function NewFuelSupply() {
-  const user = await getSessionUser();
-  const cars = await carService.getAll({ userId: user?.id });
+  const cars = await carService.getAll();
 
   return (
     <main>
