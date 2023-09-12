@@ -3,16 +3,19 @@ import { carService } from "@/services/car";
 import { UpdateFuelSupplyForm } from "./UpdateFuelSupplyForm";
 import { fuelSupplyService } from "@/services/fuelSupply";
 import { Content } from "@/components/Content";
-import { nextAuthOptions } from "@/app/api/auth/[...nextauth]/options";
-import { getServerSession } from "next-auth";
+import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessionUser";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditFuelSupply({ params }: { params: { id: string } }) {
+export default async function EditFuelSupply({
+  params,
+}: {
+  params: { id: string };
+}) {
   const { id } = params;
-  const session = await getServerSession(nextAuthOptions);
+  const user = await getSessionUser();
   const fuelSupply = await fuelSupplyService.getById(id);
-  const cars = await carService.getAll({ userId: session?.user.id});
+  const cars = await carService.getAll({ userId: user?.id });
 
   return (
     <main>
