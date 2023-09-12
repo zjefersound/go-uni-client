@@ -29,7 +29,7 @@ export interface IRidePatchPayload {
   observations?: string;
 }
 
-const getToday: () => Promise<IRide> = async() => {
+const getToday: () => Promise<IRide> = async () => {
   const user = await getSessionUser();
   return sanityClient.fetch(groq`*[_type == "ride"][date == "${
     new Date().toISOString().split("T")[0]
@@ -111,6 +111,15 @@ const getById: (id: string) => Promise<IRide> = (id) => {
     extraCosts,
     observations,
     paid,
+    bills[] -> {
+      ...,
+      payer -> {
+        ...
+      },
+      receiver -> {
+        ...
+      },
+    },
     car -> {
       ...
     },

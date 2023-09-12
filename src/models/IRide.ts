@@ -1,5 +1,7 @@
+import { IBill } from "./IBill";
 import { ICar } from "./ICar";
 import { ITrip } from "./ITrip";
+import { IUser } from "./IUser";
 
 export interface IRide {
   _id: string;
@@ -13,4 +15,6 @@ export interface IRide {
   paid: boolean;
   car: ICar;
   trip: ITrip;
+  driver: IUser;
+  bills: IBill[];
 }
