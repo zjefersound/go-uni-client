@@ -4,6 +4,7 @@ import { IRide } from "@/models/IRide";
 import { IServiceOptions } from "@/models/IServiceOptions";
 import { dateToString } from "@/utils/date/dateToString";
 import { filtersToGroq } from "@/utils/filtersToGroq";
+import { toSanityRef } from "@/utils/toSanityRef";
 import { groq } from "next-sanity";
 
 export interface IRidePayload {
@@ -16,18 +17,10 @@ export interface IRidePayload {
   pricePerPassenger: number;
   extraCosts: number;
   observations: string;
+  billIds: string[];
 }
-export interface IRidePatchPayload {
-  date?: string;
-  paid?: boolean;
-  tripId?: string;
-  carId?: string;
-  passengers?: number;
-  passengersOneWay?: number;
-  pricePerPassenger?: number;
-  extraCosts?: number;
-  observations?: string;
-}
+
+export interface IRidePatchPayload extends Partial<IRidePayload> {}
 
 const getToday: () => Promise<IRide> = async () => {
   const user = await getSessionUser();
@@ -129,7 +122,10 @@ const getById: (id: string) => Promise<IRide> = (id) => {
   }`);
 };
 
-const create = (ride: IRidePayload) => {
+const create = async (ride: IRidePayload) => {
+  const user = await getSessionUser();
+  const bills = ride.billIds?.map(toSanityRef) || [];
+
   return sanityClient.create({
     _type: "ride",
     date: ride.date,
@@ -139,31 +135,25 @@ const create = (ride: IRidePayload) => {
     extraCosts: ride.extraCosts,
     observations: ride.observations,
     paid: ride.paid,
-    trip: {
-      _ref: ride.tripId,
-      _type: "reference",
-    },
-    car: {
-      _ref: ride.carId,
-      _type: "reference",
-    },
+    trip: toSanityRef(ride.tripId),
+    car: toSanityRef(ride.carId),
+    driver: toSanityRef(user.id),
+    bills,
   });
 };
 
 const patch = (id: string, ride: IRidePatchPayload) => {
   const payload: any = { ...ride };
+  if (ride.billIds) {
+    payload.bills = ride.billIds?.map(toSanityRef) || [];
+    delete payload.billIds;
+  }
   if (ride.tripId) {
-    payload.trip = {
-      _ref: ride.tripId,
-      _type: "reference",
-    };
+    payload.trip = toSanityRef(ride.tripId);
     delete payload.tripId;
   }
   if (ride.carId) {
-    payload.car = {
-      _ref: ride.carId,
-      _type: "reference",
-    };
+    payload.car = toSanityRef(ride.carId);
     delete payload.carId;
   }
   return sanityClient.patch(id).set(payload).commit();

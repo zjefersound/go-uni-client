@@ -3,6 +3,7 @@ import { sanityClient } from "@/configs/sanity";
 import { IBill } from "@/models/IBill";
 import { IServiceOptions } from "@/models/IServiceOptions";
 import { filtersToGroq } from "@/utils/filtersToGroq";
+import { toSanityRef } from "@/utils/toSanityRef";
 import { groq } from "next-sanity";
 
 export interface IBillPayload {
@@ -74,17 +75,11 @@ const create = (bill: IBillPayload) => {
     currency: bill.currency,
     description: bill.description,
     paid: bill.paid,
-    receiver: {
-      _ref: bill.receiverId,
-      _type: "reference",
-    },
+    receiver: toSanityRef(bill.receiverId),
   };
 
   if (bill.payerId) {
-    payload.payer = {
-      _ref: bill.payerId,
-      _type: "reference",
-    };
+    payload.payer = toSanityRef(bill.payerId);
   }
   return sanityClient.create(payload);
 };
@@ -93,17 +88,11 @@ const patch = (id: string, bill: IBillPayload) => {
   const payload: any = { ...bill };
 
   if (bill.receiverId) {
-    payload.receiver = {
-      _ref: bill.receiverId,
-      _type: "reference",
-    };
+    payload.receiver = toSanityRef(bill.receiverId);
     delete payload.receiverId;
   }
   if (bill.payerId) {
-    payload.payer = {
-      _ref: bill.payerId,
-      _type: "reference",
-    };
+    payload.payer = toSanityRef(bill.payerId);
     delete payload.payerId;
   }
 

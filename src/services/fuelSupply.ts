@@ -3,6 +3,7 @@ import { sanityClient } from "@/configs/sanity";
 import { IFuelSupply } from "@/models/IFuelSupply";
 import { IServiceOptions } from "@/models/IServiceOptions";
 import { filtersToGroq } from "@/utils/filtersToGroq";
+import { toSanityRef } from "@/utils/toSanityRef";
 import { groq } from "next-sanity";
 
 export interface IFuelSupplyPayload {
@@ -54,10 +55,7 @@ const create = (fuelSupply: IFuelSupplyPayload) => {
     date: fuelSupply.date,
     pricePerLiter: fuelSupply.pricePerLiter,
     price: fuelSupply.price,
-    car: {
-      _ref: fuelSupply.carId,
-      _type: "reference",
-    },
+    car: toSanityRef(fuelSupply.carId),
   });
 };
 
@@ -65,10 +63,7 @@ const patch = (id: string, fuelSupply: IFuelSupplyPayload) => {
   const payload: any = { ...fuelSupply };
 
   if (fuelSupply.carId) {
-    payload.car = {
-      _ref: fuelSupply.carId,
-      _type: "reference",
-    };
+    payload.car = toSanityRef(fuelSupply.carId);
     delete payload.carId;
   }
   return sanityClient.patch(id).set(payload).commit();
