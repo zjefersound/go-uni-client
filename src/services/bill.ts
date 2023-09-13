@@ -103,7 +103,7 @@ const handleDelete = (id: string) => {
   return sanityClient.delete(id);
 };
 
-export const fuelSupplyService = {
+export const billService = {
   getAll,
   getById,
   create,

@@ -5,12 +5,16 @@ function stringifyValue (value: any) {
   return value;
 }
 
+function adaptKey (key: string){
+  return key.replace('._id', '._ref');
+}
+
 export function filtersToGroq(filters: ISanityFilter[] = []) {
   if (!filters.length) return "";
   let filtersText = filters
     .map(
       (filter) =>
-        `[${filter.key} ${filter.operation} ${stringifyValue(filter.value)}]`
+        `[${adaptKey(filter.key)} ${filter.operation} ${stringifyValue(filter.value)}]`
     )
     .reduce((text, filter) => text + " " + filter, "");
   return filtersText;

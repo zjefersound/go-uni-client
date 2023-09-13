@@ -1,8 +1,8 @@
 import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessionUser";
 import { sanityClient } from "@/configs/sanity";
 import { IFuelSupply } from "@/models/IFuelSupply";
-import { IServiceOptions } from "@/models/IServiceOptions";
-import { fuelSupplyRepository } from "@/repositories/fuelSupplyRepository";
+import { IRepositoryOptions } from "@/models/IRepositoryOptions";
+import { filtersToGroq } from "@/utils/filtersToGroq";
 import { toSanityRef } from "@/utils/toSanityRef";
 import { groq } from "next-sanity";
 
@@ -13,23 +13,43 @@ export interface IFuelSupplyPayload {
   pricePerLiter: number;
 }
 
-const getAll: (options?: IServiceOptions) => Promise<IFuelSupply[]> = async ({
+const getAll: (
+  options?: IRepositoryOptions
+) => Promise<IFuelSupply[]> = async ({
   filters,
+  rawGroq,
+  order = { key: "date", type: "desc" },
 } = {}) => {
-  const user = await getSessionUser();
-  return fuelSupplyRepository.getAll({
-    filters,
-    rawGroq: groq`[car._ref in *[_type=="car" && owner._ref=="${user.id}"]._id ]`,
-  });
+  return sanityClient.fetch(groq`*[_type == "fuelSupply"] ${filtersToGroq(
+    filters
+  )} ${rawGroq} | order(${order.key} ${order.type}) {
+    ...,
+    car -> {
+      ...
+    }
+  }`);
 };
 
-const getById: (id: string) => Promise<IFuelSupply> = (id) => {
-  return fuelSupplyRepository.getById(id);
+const getById: (
+  id: string,
+  options?: IRepositoryOptions
+) => Promise<IFuelSupply> = (id) => {
+  return sanityClient.fetch(groq`*[_type == "fuelSupply"][_id == "${id}"][0]{
+    _id,
+    _createdAt,
+    date,
+    price,
+    pricePerLiter,
+    car -> {
+      ...
+    },
+  }`);
 };
 
-const getLastUntilDate: (date: string) => Promise<IFuelSupply> = async (
-  date
-) => {
+const getLastUntilDate: (
+  date: string,
+  options?: IRepositoryOptions
+) => Promise<IFuelSupply> = async (date) => {
   const user = await getSessionUser();
   return sanityClient.fetch(groq`*[_type == "fuelSupply" && car._ref in *[_type=="car" && owner._ref=="${user.id}"]._id][date <= "${date}"] | order(date desc)[0]{
     ...
@@ -59,7 +79,7 @@ const handleDelete = (id: string) => {
   return sanityClient.delete(id);
 };
 
-export const fuelSupplyService = {
+export const fuelSupplyRepository = {
   getAll,
   getById,
   getLastUntilDate,
