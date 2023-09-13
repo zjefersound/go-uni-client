@@ -33,6 +33,7 @@ export function RideForm({
   const [rideData, setRideData] = useState(
     initialData ||
       ({
+        billIds: [],
         tripId: trips[0]._id,
         date: new Date().toISOString().slice(0, 10),
         paid: false,

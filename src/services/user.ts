@@ -10,6 +10,7 @@ const getById: (id: string) => Promise<IUser> = (id) => {
     username,
     email,
     avatar,
+    role,
   }`);
 };
 
