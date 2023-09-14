@@ -2,7 +2,7 @@ import {
   IValidationError,
   IValidationReturn,
 } from "@/models/IValidationReturn";
-import { IRidePayload } from "@/repositories/RideRepository";
+import { IRidePayload } from "@/models/IRide";
 
 export function isValidNewRide(ride: IRidePayload): IValidationReturn {
   const errors: IValidationError[] = [];

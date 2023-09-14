@@ -1,5 +1,4 @@
-import { IRide } from "@/models/IRide";
-import { IRidePayload } from "@/repositories/RideRepository";
+import { IRide, IRidePayload } from "@/models/IRide";
 
 export function parseRideToPayload(ride: IRide) {
   return { 

@@ -9,7 +9,7 @@ import { isValidNewFuelSupply } from "./validation";
 import { IValidationError } from "@/models/IValidationReturn";
 import { FormControl } from "@/components/forms/FormControl";
 import { Loading } from "@/components/Loading";
-import { IFuelSupplyPayload } from "@/repositories/FuelSupplyRepository";
+import { IFuelSupplyPayload } from "@/models/IFuelSupply";
 
 interface Props {
   cars: ICar[];

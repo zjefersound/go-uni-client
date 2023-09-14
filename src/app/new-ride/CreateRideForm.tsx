@@ -4,7 +4,7 @@ import { RideForm } from "@/containers/RideForm";
 import { useToast } from "@/hooks/useToast";
 import { ICar } from "@/models/ICar";
 import { ITrip } from "@/models/ITrip";
-import { IRidePayload } from "@/repositories/RideRepository";
+import { IRidePayload } from "@/models/IRide";
 import { rideService } from "@/services/ride";
 import { useRouter } from "next/navigation";
 

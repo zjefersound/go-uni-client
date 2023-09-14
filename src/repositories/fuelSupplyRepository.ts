@@ -1,16 +1,9 @@
 import { sanityClient } from "@/configs/sanity";
-import { IFuelSupply } from "@/models/IFuelSupply";
+import { IFuelSupply, IFuelSupplyPayload } from "@/models/IFuelSupply";
 import { IRepositoryOptions } from "@/models/IRepositoryOptions";
 import { groq } from "next-sanity";
 import { BaseRepository } from "./BaseRepository";
 import { ISort } from "@/models/ISort";
-
-export interface IFuelSupplyPayload {
-  date: string;
-  carId: string;
-  price: number;
-  pricePerLiter: number;
-}
 
 class FuelSupplyRepository extends BaseRepository<
   IFuelSupply,

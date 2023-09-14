@@ -12,7 +12,7 @@ import { isValidNewRide } from "./validation";
 import { IValidationError } from "@/models/IValidationReturn";
 import { FormControl } from "@/components/forms/FormControl";
 import { Loading } from "@/components/Loading";
-import { IRidePayload } from "@/repositories/RideRepository";
+import { IRidePayload } from "@/models/IRide";
 
 interface Props {
   trips: ITrip[];

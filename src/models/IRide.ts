@@ -18,3 +18,17 @@ export interface IRide {
   driver: IUser;
   bills: IBill[];
 }
+
+export interface IRidePayload {
+  date: string;
+  paid: boolean;
+  tripId: string;
+  carId: string;
+  driverId?: string;
+  passengers: number;
+  passengersOneWay: number;
+  pricePerPassenger: number;
+  extraCosts: number;
+  observations: string;
+  billIds: string[];
+}

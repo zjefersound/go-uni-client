@@ -1,7 +1,7 @@
 import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessionUser";
-import { IRide } from "@/models/IRide";
+import { IRide, IRidePayload } from "@/models/IRide";
 import { IServiceOptions } from "@/models/IServiceOptions";
-import RideRepository, { IRidePayload } from "@/repositories/RideRepository";
+import RideRepository from "@/repositories/RideRepository";
 
 const getToday = async () => {
   const user = await getSessionUser();

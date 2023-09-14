@@ -3,7 +3,7 @@
 import { FuelSupplyForm } from "@/containers/FuelSupplyForm";
 import { useToast } from "@/hooks/useToast";
 import { ICar } from "@/models/ICar";
-import { IFuelSupplyPayload } from "@/repositories/FuelSupplyRepository";
+import { IFuelSupplyPayload } from "@/models/IFuelSupply";
 import { fuelSupplyService } from "@/services/fuelSupply";
 import { useRouter } from "next/navigation";
 

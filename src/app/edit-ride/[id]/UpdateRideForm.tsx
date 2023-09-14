@@ -3,9 +3,8 @@ import { RideForm } from "@/containers/RideForm";
 import { parseRideToPayload } from "@/containers/RideForm/utils/parseRideToPayload";
 import { useToast } from "@/hooks/useToast";
 import { ICar } from "@/models/ICar";
-import { IRide } from "@/models/IRide";
+import { IRide, IRidePayload } from "@/models/IRide";
 import { ITrip } from "@/models/ITrip";
-import { IRidePayload } from "@/repositories/RideRepository";
 import { rideService } from "@/services/ride";
 import { useRouter } from "next/navigation";
 interface Props {

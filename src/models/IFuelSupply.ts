@@ -8,3 +8,10 @@ export interface IFuelSupply {
   date: string;
   car: ICar;
 }
+
+export interface IFuelSupplyPayload {
+  date: string;
+  carId: string;
+  price: number;
+  pricePerLiter: number;
+}

@@ -1,8 +1,7 @@
 import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessionUser";
 import { IServiceOptions } from "@/models/IServiceOptions";
-import FuelSupplyRepository, {
-  IFuelSupplyPayload,
-} from "@/repositories/FuelSupplyRepository";
+import FuelSupplyRepository from "@/repositories/FuelSupplyRepository";
+import { IFuelSupplyPayload } from "@/models/IFuelSupply";
 import { groq } from "next-sanity";
 
 const getFindByCarOwnerGroq = (userId: string) =>
