@@ -1,19 +1,9 @@
 import { sanityClient } from "@/configs/sanity";
-import { IBaseRepository } from "@/models/IBaseRepository";
 import { IFuelSupply } from "@/models/IFuelSupply";
 import { IRepositoryOptions } from "@/models/IRepositoryOptions";
-import { filtersToGroq } from "@/utils/filtersToGroq";
-import { sortToGroq } from "@/utils/sortToGroq";
-import { toSanityRef } from "@/utils/toSanityRef";
 import { groq } from "next-sanity";
-
-interface IFuelSupplyRepository
-  extends IBaseRepository<IFuelSupply, IFuelSupplyPayload> {
-  getLastUntilDate(
-    date: string,
-    options?: IRepositoryOptions
-  ): Promise<IFuelSupply>;
-}
+import { BaseRepository } from "./BaseRepository";
+import { ISort } from "@/models/ISort";
 
 export interface IFuelSupplyPayload {
   date: string;
@@ -22,65 +12,30 @@ export interface IFuelSupplyPayload {
   pricePerLiter: number;
 }
 
-class FuelSupplyRepository implements IFuelSupplyRepository {
-  getAll: (options?: IRepositoryOptions) => Promise<IFuelSupply[]> =
-    async ({ filters, rawGroq = "", sort } = {}) => {
-      return sanityClient.fetch(groq`*[_type == "fuelSupply"] ${filtersToGroq(
-        filters
-      )} ${rawGroq} | ${sortToGroq(sort ?? { key: "date", type: "desc" })} {
-      ...,
-      car -> {
-        ...
-      }
-    }`);
-    };
+class FuelSupplyRepository extends BaseRepository<
+  IFuelSupply,
+  IFuelSupplyPayload
+> {
+  type = "fuelSupply";
+  objectProjection = groq`
+    _id,
+    _createdAt,
+    date,
+    price,
+    pricePerLiter,
+    car -> {
+      ...
+    },
+  `;
+  sort: ISort = { key: "date", type: "desc" };
 
-  getById: (
-    id: string,
-    options?: IRepositoryOptions
-  ) => Promise<IFuelSupply> = (id) => {
-    return sanityClient.fetch(groq`*[_type == "fuelSupply"][_id == "${id}"][0]{
-      _id,
-      _createdAt,
-      date,
-      price,
-      pricePerLiter,
-      car -> {
-        ...
-      },
-    }`);
-  };
   getLastUntilDate: (
     date: string,
     options?: IRepositoryOptions
   ) => Promise<IFuelSupply> = async (date, { rawGroq = "" } = {}) => {
-    return sanityClient.fetch(groq`*[_type == "fuelSupply"][date <= "${date}"] ${rawGroq} | order(date desc)[0]{
+    return sanityClient.fetch(groq`*[_type == "${this.type}"][date <= "${date}"] ${rawGroq} | order(date desc)[0]{
       ...
     }`);
-  };
-
-  create = (fuelSupply: IFuelSupplyPayload) => {
-    return sanityClient.create({
-      _type: "fuelSupply",
-      date: fuelSupply.date,
-      pricePerLiter: fuelSupply.pricePerLiter,
-      price: fuelSupply.price,
-      car: toSanityRef(fuelSupply.carId),
-    });
-  };
-
-  patch = (id: string, fuelSupply: IFuelSupplyPayload) => {
-    const payload: any = { ...fuelSupply };
-
-    if (fuelSupply.carId) {
-      payload.car = toSanityRef(fuelSupply.carId);
-      delete payload.carId;
-    }
-    return sanityClient.patch(id).set(payload).commit();
-  };
-
-  delete = (id: string) => {
-    return sanityClient.delete(id);
   };
 }
 
