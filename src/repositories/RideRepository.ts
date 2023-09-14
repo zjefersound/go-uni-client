@@ -35,6 +35,9 @@ class RideRepository extends BaseRepository<IRide, IRidePayload> {
       extraCosts,
       observations,
       paid,
+      driver -> {
+        ...
+      },
       car -> {
         ...
       },
@@ -54,7 +57,7 @@ class RideRepository extends BaseRepository<IRide, IRidePayload> {
     this.defaultSort = { key: "date", type: "desc" } as ISort;
   }
 
-  getToday(options?: IRepositoryOptions) {
+  getToday(options?: IRepositoryOptions): Promise<IRide> {
     return sanityClient.fetch(groq`*[_type == "ride"][date == "${
       new Date().toISOString().split("T")[0]
     }"] ${filtersToGroq(options?.filters)} [0]{
@@ -62,25 +65,11 @@ class RideRepository extends BaseRepository<IRide, IRidePayload> {
     }`);
   }
 
-  getRecents(options: IRepositoryOptions) {
+  getRecents(options: IRepositoryOptions): Promise<IRide[]> {
     return sanityClient.fetch(groq`*[_type == "ride"][date != "${dateToString(
       new Date()
     )}"] ${filtersToGroq(options?.filters)} | order(date desc)[0..3]{
-      _id,
-      _createdAt,
-      passengers,
-      passengersOneWay,
-      date,
-      pricePerPassenger,
-      extraCosts,
-      observations,
-      paid,
-      car -> {
-        ...
-      },
-      trip -> {
-        ...
-      }
+      ${this.objectProjection}
     }`);
   }
 }

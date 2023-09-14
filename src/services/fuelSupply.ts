@@ -1,14 +1,14 @@
 import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessionUser";
-import { IFuelSupply } from "@/models/IFuelSupply";
 import { IServiceOptions } from "@/models/IServiceOptions";
-import FuelSupplyRepository, { IFuelSupplyPayload } from "@/repositories/FuelSupplyRepository";
+import FuelSupplyRepository, {
+  IFuelSupplyPayload,
+} from "@/repositories/FuelSupplyRepository";
 import { groq } from "next-sanity";
 
-const getFindByCarOwnerGroq = (userId: string) => groq`[car._ref in *[_type=="car" && owner._ref=="${userId}"]._id ]`;
+const getFindByCarOwnerGroq = (userId: string) =>
+  groq`[car._ref in *[_type=="car" && owner._ref=="${userId}"]._id ]`;
 
-const getAll: (options?: IServiceOptions) => Promise<IFuelSupply[]> = async ({
-  filters,
-} = {}) => {
+const getAll = async ({ filters }: IServiceOptions = {}) => {
   const user = await getSessionUser();
   return FuelSupplyRepository.getAll({
     filters,
@@ -16,13 +16,11 @@ const getAll: (options?: IServiceOptions) => Promise<IFuelSupply[]> = async ({
   });
 };
 
-const getById: (id: string) => Promise<IFuelSupply> = (id) => {
+const getById = (id: string) => {
   return FuelSupplyRepository.getById(id);
 };
 
-const getLastUntilDate: (date: string) => Promise<IFuelSupply> = async (
-  date
-) => {
+const getLastUntilDate = async (date: string) => {
   const user = await getSessionUser();
   return FuelSupplyRepository.getLastUntilDate(date, {
     rawGroq: getFindByCarOwnerGroq(user.id),

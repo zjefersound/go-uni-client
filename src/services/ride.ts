@@ -3,27 +3,21 @@ import { IRide } from "@/models/IRide";
 import { IServiceOptions } from "@/models/IServiceOptions";
 import RideRepository, { IRidePayload } from "@/repositories/RideRepository";
 
-const getToday: () => Promise<IRide> = async () => {
+const getToday = async () => {
   const user = await getSessionUser();
   return RideRepository.getToday({
-    filters: [
-      { key: "driver._id", operation: "==", value: user.id },
-    ],
+    filters: [{ key: "driver._id", operation: "==", value: user.id }],
   });
 };
 
-const getRecents: () => Promise<IRide[]> = async () => {
+const getRecents = async () => {
   const user = await getSessionUser();
   return RideRepository.getRecents({
-    filters: [
-      { key: "driver._id", operation: "==", value: user.id },
-    ],
+    filters: [{ key: "driver._id", operation: "==", value: user.id }],
   });
 };
 
-const getAll: (options?: IServiceOptions) => Promise<IRide[]> = async ({
-  filters = [],
-} = {}) => {
+const getAll = async ({ filters = [] }: IServiceOptions = {}) => {
   const user = await getSessionUser();
   return RideRepository.getAll({
     filters: [
