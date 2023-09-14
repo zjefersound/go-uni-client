@@ -16,18 +16,21 @@ class FuelSupplyRepository extends BaseRepository<
   IFuelSupply,
   IFuelSupplyPayload
 > {
-  type = "fuelSupply";
-  objectProjection = groq`
-    _id,
-    _createdAt,
-    date,
-    price,
-    pricePerLiter,
-    car -> {
-      ...
-    },
-  `;
-  sort: ISort = { key: "date", type: "desc" };
+  constructor() {
+    super();
+    this.type = "fuelSupply";
+    this.objectProjection = groq`
+      _id,
+      _createdAt,
+      date,
+      price,
+      pricePerLiter,
+      car -> {
+        ...
+      },
+    `;
+    this.defaultSort = { key: "date", type: "desc" } as ISort;
+  }
 
   getLastUntilDate: (
     date: string,

@@ -8,9 +8,9 @@ import { toSanityRef } from "@/utils/toSanityRef";
 import { groq } from "next-sanity";
 
 export class BaseRepository<T, P> implements IBaseRepository<T, P> {
-  type?: string;
-  objectProjection?: string;
-  sort?: ISort;
+  protected type?: string;
+  protected objectProjection?: string;
+  protected defaultSort?: ISort;
 
   private createPayload(data: any) {
     const payload = { ...data };
@@ -30,8 +30,8 @@ export class BaseRepository<T, P> implements IBaseRepository<T, P> {
   } = {}) => {
     return sanityClient.fetch(groq`*[_type == "${this.type}"] ${filtersToGroq(
       filters
-    )} ${rawGroq} | ${sortToGroq(sort ?? this.sort ?? { key: "_createdAt", type: "desc" })} {
-      ${this.objectProjection}
+    )} ${rawGroq} | ${sortToGroq(sort ?? this.defaultSort ?? { key: "_createdAt", type: "desc" })} {
+      ${this.objectProjection || "..."}
     }`);
   };
 

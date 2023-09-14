@@ -1,11 +1,8 @@
-import { sanityClient } from "@/configs/sanity";
 import { ITrip } from "@/models/ITrip";
-import { groq } from "next-sanity";
+import TripRepository from "@/repositories/TripRepository";
 
 const getAll: () => Promise<ITrip[]> = () => {
-  return sanityClient.fetch(groq`*[_type == "trip"]{
-    ...
-  }`);
+  return TripRepository.getAll();
 };
 
 export const tripService = {
