@@ -1,5 +1,4 @@
 import { ICar } from "@/models/ICar";
-import { groq } from "next-sanity";
 import { BaseRepository } from "./BaseRepository";
 
 export interface ICarPayload {

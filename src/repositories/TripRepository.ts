@@ -1,5 +1,4 @@
 import { ITrip } from "@/models/ITrip";
-import { groq } from "next-sanity";
 import { BaseRepository } from "./BaseRepository";
 
 export interface ITripPayload {

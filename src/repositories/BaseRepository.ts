@@ -19,6 +19,10 @@ export class BaseRepository<T, P> implements IBaseRepository<T, P> {
         payload[key.replace("Id", "")] = toSanityRef(value as string);
         delete payload[key];
       }
+      if (key.endsWith("Ids")) {
+        payload[key.replace("Ids", "")] = payload[key].map(toSanityRef) || [];
+        delete payload[key];
+      }
     });
     return payload;
   }
@@ -46,7 +50,7 @@ export class BaseRepository<T, P> implements IBaseRepository<T, P> {
     return sanityClient.create(payload);
   };
 
-  patch = (id: string, entity: P) => {
+  patch = (id: string, entity: Partial<P>) => {
     const payload: any = this.createPayload(entity);
     return sanityClient.patch(id).set(payload).commit();
   };

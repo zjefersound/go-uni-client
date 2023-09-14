@@ -44,8 +44,8 @@ const handleDelete = (id: string) => {
 export const fuelSupplyService = {
   getAll,
   getById,
-  getLastUntilDate,
   create,
   patch,
   delete: handleDelete,
+  getLastUntilDate,
 };
