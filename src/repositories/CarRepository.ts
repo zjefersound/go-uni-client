@@ -1,13 +1,5 @@
-import { ICar } from "@/models/ICar";
+import { ICar, ICarPayload } from "@/models/ICar";
 import { BaseRepository } from "./BaseRepository";
-
-export interface ICarPayload {
-  model: string;
-  freeSeats: number;
-  distancePerLiter: number;
-  ownerId: string;
-  photo: any;
-}
 
 class CarRepository extends BaseRepository<ICar, ICarPayload> {
   constructor() {

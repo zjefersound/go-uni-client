@@ -1,16 +1,7 @@
-import { IUser } from "@/models/IUser";
+import { IUser, IUserPayload } from "@/models/IUser";
 import { BaseRepository } from "./BaseRepository";
 import { groq } from "next-sanity";
 import { sanityClient } from "@/configs/sanity";
-
-export interface IUserPayload {
-  username: string;
-  name: string;
-  email: string;
-  password?: string;
-  avatar: any;
-  role: string;
-}
 
 class UserRepository extends BaseRepository<IUser, IUserPayload> {
   constructor() {

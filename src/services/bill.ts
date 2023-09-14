@@ -1,20 +1,10 @@
 import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessionUser";
 import { sanityClient } from "@/configs/sanity";
-import { IBill } from "@/models/IBill";
+import { IBill, IBillPayload } from "@/models/IBill";
 import { IServiceOptions } from "@/models/IServiceOptions";
 import { filtersToGroq } from "@/utils/filtersToGroq";
 import { toSanityRef } from "@/utils/toSanityRef";
 import { groq } from "next-sanity";
-
-export interface IBillPayload {
-  payerId: string;
-  receiverId: string;
-  date: string;
-  amount: number;
-  currency: string;
-  description: string;
-  paid: boolean;
-}
 
 const getAll: (options?: IServiceOptions) => Promise<IBill[]> = async ({
   filters,

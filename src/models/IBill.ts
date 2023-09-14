@@ -10,3 +10,13 @@ export interface IBill {
   description: string;
   paid: boolean;
 }
+
+export interface IBillPayload {
+  payerId: string;
+  receiverId: string;
+  date: string;
+  amount: number;
+  currency: string;
+  description: string;
+  paid: boolean;
+}
