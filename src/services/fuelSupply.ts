@@ -1,17 +1,10 @@
 import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessionUser";
-import { sanityClient } from "@/configs/sanity";
 import { IFuelSupply } from "@/models/IFuelSupply";
 import { IServiceOptions } from "@/models/IServiceOptions";
-import { fuelSupplyRepository } from "@/repositories/fuelSupplyRepository";
-import { toSanityRef } from "@/utils/toSanityRef";
+import { IFuelSupplyPayload, fuelSupplyRepository } from "@/repositories/fuelSupplyRepository";
 import { groq } from "next-sanity";
 
-export interface IFuelSupplyPayload {
-  date: string;
-  carId: string;
-  price: number;
-  pricePerLiter: number;
-}
+const getFindByCarOwnerGroq = (userId: string) => groq`[car._ref in *[_type=="car" && owner._ref=="${userId}"]._id ]`;
 
 const getAll: (options?: IServiceOptions) => Promise<IFuelSupply[]> = async ({
   filters,
@@ -19,7 +12,7 @@ const getAll: (options?: IServiceOptions) => Promise<IFuelSupply[]> = async ({
   const user = await getSessionUser();
   return fuelSupplyRepository.getAll({
     filters,
-    rawGroq: groq`[car._ref in *[_type=="car" && owner._ref=="${user.id}"]._id ]`,
+    rawGroq: getFindByCarOwnerGroq(user.id),
   });
 };
 
@@ -31,32 +24,21 @@ const getLastUntilDate: (date: string) => Promise<IFuelSupply> = async (
   date
 ) => {
   const user = await getSessionUser();
-  return sanityClient.fetch(groq`*[_type == "fuelSupply" && car._ref in *[_type=="car" && owner._ref=="${user.id}"]._id][date <= "${date}"] | order(date desc)[0]{
-    ...
-  }`);
-};
-
-const create = (fuelSupply: IFuelSupplyPayload) => {
-  return sanityClient.create({
-    _type: "fuelSupply",
-    date: fuelSupply.date,
-    pricePerLiter: fuelSupply.pricePerLiter,
-    price: fuelSupply.price,
-    car: toSanityRef(fuelSupply.carId),
+  return fuelSupplyRepository.getLastUntilDate(date, {
+    rawGroq: getFindByCarOwnerGroq(user.id),
   });
 };
 
-const patch = (id: string, fuelSupply: IFuelSupplyPayload) => {
-  const payload: any = { ...fuelSupply };
-
-  if (fuelSupply.carId) {
-    payload.car = toSanityRef(fuelSupply.carId);
-    delete payload.carId;
-  }
-  return sanityClient.patch(id).set(payload).commit();
+const create = (fuelSupply: IFuelSupplyPayload) => {
+  return fuelSupplyRepository.create(fuelSupply);
 };
+
+const patch = (id: string, fuelSupply: IFuelSupplyPayload) => {
+  return fuelSupplyRepository.patch(id, fuelSupply);
+};
+
 const handleDelete = (id: string) => {
-  return sanityClient.delete(id);
+  return fuelSupplyRepository.delete(id);
 };
 
 export const fuelSupplyService = {
