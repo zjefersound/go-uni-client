@@ -2,7 +2,7 @@ import {
   IValidationError,
   IValidationReturn,
 } from "@/models/IValidationReturn";
-import { IFuelSupplyPayload } from "@/services/fuelSupply";
+import { IFuelSupplyPayload } from "@/repositories/FuelSupplyRepository";
 
 export function isValidNewFuelSupply(
   data: IFuelSupplyPayload

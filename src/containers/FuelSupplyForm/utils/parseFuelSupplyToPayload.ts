@@ -1,5 +1,5 @@
 import { IFuelSupply } from "@/models/IFuelSupply";
-import { IFuelSupplyPayload } from "@/services/fuelSupply";
+import { IFuelSupplyPayload } from "@/repositories/FuelSupplyRepository";
 
 export function parseFuelSupplyToPayload(fuelSupply: IFuelSupply) {
   return {

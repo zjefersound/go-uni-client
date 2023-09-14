@@ -5,7 +5,8 @@ import { useToast } from "@/hooks/useToast";
 import { ICar } from "@/models/ICar";
 import { IRide } from "@/models/IRide";
 import { ITrip } from "@/models/ITrip";
-import { IRidePayload, rideService } from "@/services/ride";
+import { IRidePayload } from "@/repositories/RideRepository";
+import { rideService } from "@/services/ride";
 import { useRouter } from "next/navigation";
 interface Props {
   ride: IRide;

@@ -10,9 +10,9 @@ import { Switch } from "@/components/forms/Switch";
 import { Button } from "@/components/Button";
 import { isValidNewRide } from "./validation";
 import { IValidationError } from "@/models/IValidationReturn";
-import { IRidePayload } from "@/services/ride";
 import { FormControl } from "@/components/forms/FormControl";
 import { Loading } from "@/components/Loading";
+import { IRidePayload } from "@/repositories/RideRepository";
 
 interface Props {
   trips: ITrip[];

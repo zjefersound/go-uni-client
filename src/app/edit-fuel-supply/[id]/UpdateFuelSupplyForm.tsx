@@ -5,7 +5,8 @@ import { parseFuelSupplyToPayload } from "@/containers/FuelSupplyForm/utils/pars
 import { useToast } from "@/hooks/useToast";
 import { ICar } from "@/models/ICar";
 import { IFuelSupply } from "@/models/IFuelSupply";
-import { IFuelSupplyPayload, fuelSupplyService } from "@/services/fuelSupply";
+import { IFuelSupplyPayload } from "@/repositories/FuelSupplyRepository";
+import { fuelSupplyService } from "@/services/fuelSupply";
 import { useRouter } from "next/navigation";
 import { AiOutlineDelete } from "react-icons/ai";
 interface Props {
