@@ -5,6 +5,7 @@ import { ISort } from "@/models/ISort";
 import { filtersToGroq } from "@/utils/filtersToGroq";
 import { sortToGroq } from "@/utils/sortToGroq";
 import { toSanityRef } from "@/utils/toSanityRef";
+import { toSanityRefWithKey } from "@/utils/toSanityRefWithKey";
 import { groq } from "next-sanity";
 
 export class BaseRepository<T, P> implements IBaseRepository<T, P> {
@@ -20,7 +21,7 @@ export class BaseRepository<T, P> implements IBaseRepository<T, P> {
         delete payload[key];
       }
       if (key.endsWith("Ids")) {
-        payload[key.replace("Ids", "")] = payload[key].map(toSanityRef) || [];
+        payload[key.replace("Ids", "s")] = payload[key].map(toSanityRefWithKey) || [];
         delete payload[key];
       }
     });

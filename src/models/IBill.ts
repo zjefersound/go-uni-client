@@ -12,11 +12,11 @@ export interface IBill {
 }
 
 export interface IBillPayload {
-  payerId: string;
+  payerId?: string;
   receiverId: string;
   date: string;
   amount: number;
-  currency: string;
+  currency?: string;
   description: string;
   paid: boolean;
 }
