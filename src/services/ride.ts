@@ -1,4 +1,5 @@
 import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessionUser";
+import { IBillPayload } from "@/models/IBill";
 import { IRide, IRidePayload } from "@/models/IRide";
 import { IServiceOptions } from "@/models/IServiceOptions";
 import BillRepository from "@/repositories/BillRepository";
@@ -32,9 +33,8 @@ const getById: (id: string) => Promise<IRide> = (id) => {
   return RideRepository.getById(id);
 };
 
-export interface IRidePayloadPassenger {
-  oneWay: boolean;
-  userId?: string;
+export interface IRideBill extends Partial<IBillPayload>{
+  amount: number;
   description: string;
 }
 export interface ICreateRidePayload {
@@ -48,22 +48,20 @@ export interface ICreateRidePayload {
   pricePerPassenger: number;
   extraCosts: number;
   observations: string;
-  selectedPassengers: IRidePayloadPassenger[];
+  bills: IRideBill[];
 }
 
 const create = async (ride: ICreateRidePayload) => {
   const payload: any = { ...ride };
-  delete payload.selectedPassengers;
+  delete payload.bills;
   const bills = [];
-  for (const passenger of ride.selectedPassengers) {
+  for (const bill of ride.bills) {
     const response = await BillRepository.create({
-      amount: passenger.oneWay
-        ? ride.pricePerPassenger / 2
-        : ride.pricePerPassenger,
+      amount: bill.amount,
       date: ride.date,
-      paid: false,
-      description: passenger.description,
-      payerId: passenger.userId,
+      paid: bill.paid || false,
+      description: bill.description,
+      payerId: bill.payerId,
       receiverId: ride.driverId,
     });
     bills.push(response);

@@ -116,9 +116,11 @@ export default async function Ride({ params }: { params: { id: string } }) {
       <Card>
         <h2 className="font-bold">Custos:</h2>
         <div className="mt-3">
-          <p className="text-sm text-gray-600">
-            Abastecido em: {printDate(lastFuelSupply.date)}
-          </p>
+          {lastFuelSupply?.date && (
+            <p className="text-sm text-gray-600">
+              Abastecido em: {printDate(lastFuelSupply.date)}
+            </p>
+          )}
           <p className="text-sm text-gray-600">
             Litro gasolina: {toCurrency(fuelPrice)}
           </p>
@@ -135,7 +137,7 @@ export default async function Ride({ params }: { params: { id: string } }) {
         </div>
       </Card>
 
-      <RideReceipt ride={ride}/>
+      <RideReceipt ride={ride} />
     </>
   );
 }

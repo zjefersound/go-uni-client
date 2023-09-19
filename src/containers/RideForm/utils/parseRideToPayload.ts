@@ -1,4 +1,5 @@
-import { IRide, IRidePayload } from "@/models/IRide";
+import { IRide } from "@/models/IRide";
+import { ICreateRidePayload } from "@/services/ride";
 
 export function parseRideToPayload(ride: IRide) {
   return { 
@@ -11,5 +12,5 @@ export function parseRideToPayload(ride: IRide) {
     extraCosts: ride.extraCosts,
     observations: ride.observations,
     paid: ride.paid,
-  } as IRidePayload;
+  } as ICreateRidePayload;
 }
