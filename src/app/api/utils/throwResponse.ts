@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
+import { IApiResponse } from "../models/IApiResponse";
 
-interface IApiResponse {
-  status: number; 
-  response: any;
-}
 export function throwResponse({ status, response }: IApiResponse) {
   return new NextResponse(JSON.stringify(response), {
     status,
