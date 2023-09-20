@@ -12,6 +12,7 @@ export interface IBill {
 }
 
 export interface IBillPayload {
+  _id?: string;
   payerId?: string;
   receiverId: string;
   date: string;

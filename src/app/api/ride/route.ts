@@ -5,7 +5,7 @@ import { withErrorHandler } from "../utils/withErrorHandler";
 import { responses } from "../utils/responses";
 
 export async function POST(request: Request) {
-  withErrorHandler(async () => {
+  return withErrorHandler(async () => {
     const user = await getSessionUser();
 
     if (!user) {

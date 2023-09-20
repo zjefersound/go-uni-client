@@ -1,5 +1,5 @@
 import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessionUser";
-import { IBillPayload } from "@/models/IBill";
+import { IBill, IBillPayload } from "@/models/IBill";
 import { IRide, IRidePayload } from "@/models/IRide";
 import { IServiceOptions } from "@/models/IServiceOptions";
 import BillRepository from "@/repositories/BillRepository";
@@ -33,9 +33,10 @@ const getById: (id: string) => Promise<IRide> = (id) => {
   return RideRepository.getById(id);
 };
 
-export interface IRideBill extends Partial<IBillPayload>{
+export interface IRideBill extends Partial<IBill>{
   amount: number;
   description: string;
+  payerId?: string;
 }
 export interface ICreateRidePayload {
   date: string;
