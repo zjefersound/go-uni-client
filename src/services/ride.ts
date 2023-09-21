@@ -33,7 +33,7 @@ const getById: (id: string) => Promise<IRide> = (id) => {
   return RideRepository.getById(id);
 };
 
-export interface IRideBill extends Partial<IBill>{
+export interface IRideBill extends Partial<IBill> {
   amount: number;
   description: string;
   payerId?: string;
@@ -67,7 +67,7 @@ const create = async (ride: ICreateRidePayload) => {
     });
     bills.push(response);
   }
-  payload.billIds = bills.map((bill) => bill._id)
+  payload.billIds = bills.map((bill) => bill._id);
 
   return RideRepository.create(payload);
 };
@@ -75,8 +75,13 @@ const create = async (ride: ICreateRidePayload) => {
 const patch = (id: string, ride: Partial<IRidePayload>) => {
   return RideRepository.patch(id, ride);
 };
-const handleDelete = (id: string) => {
-  return RideRepository.delete(id);
+const handleDelete = async (id: string, billIds: string[]) => {
+  const result = await  RideRepository.delete(id)
+  for (const billId of billIds) {
+    await BillRepository.delete(billId);
+  }
+
+  return result;
 };
 
 export const rideService = {
