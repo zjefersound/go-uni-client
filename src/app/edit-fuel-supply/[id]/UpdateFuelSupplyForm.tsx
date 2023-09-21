@@ -1,5 +1,6 @@
 "use client";
 import { AlertDialog } from "@/components/AlertDialog";
+import { TextButton } from "@/components/TextButton";
 import { FuelSupplyForm } from "@/containers/FuelSupplyForm";
 import { parseFuelSupplyToPayload } from "@/containers/FuelSupplyForm/utils/parseFuelSupplyToPayload";
 import { useToast } from "@/hooks/useToast";
@@ -79,9 +80,9 @@ export function UpdateFuelSupplyForm({ fuelSupply, cars }: Props) {
         okText="Sim, deletar"
         onConfirm={onDelete}
       >
-        <button className="text-red-600  flex items-center font-bold w-min ">
+        <TextButton type="danger">
           <AiOutlineDelete className="mr-2" /> Excluir
-        </button>
+        </TextButton>
       </AlertDialog>
     </>
   );

@@ -4,6 +4,7 @@ import { tripService } from "@/services/trip";
 import { UpdateRideForm } from "./UpdateRideForm";
 import { rideService } from "@/services/ride";
 import { Content } from "@/components/Content";
+import { userService } from "@/services/user";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,7 @@ export default async function EditRide({ params }: { params: { id: string } }) {
   const ride = await rideService.getById(id);
   const trips = await tripService.getAll();
   const cars = await carService.getAll();
+  const passengers = await userService.getAllPassengers();
 
   return (
     <main>
@@ -20,7 +22,7 @@ export default async function EditRide({ params }: { params: { id: string } }) {
         <p className="text-sm text-gray-600">
           Preencha as informações para atualizar a carona
         </p>
-        <UpdateRideForm ride={ride} trips={trips} cars={cars} />
+        <UpdateRideForm ride={ride} trips={trips} cars={cars} passengers={passengers} />
       </Content>
     </main>
   );

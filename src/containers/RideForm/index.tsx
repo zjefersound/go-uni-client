@@ -12,19 +12,23 @@ import { isValidNewRide } from "./validation";
 import { IValidationError } from "@/models/IValidationReturn";
 import { FormControl } from "@/components/forms/FormControl";
 import { Loading } from "@/components/Loading";
-import { IRidePayload } from "@/models/IRide";
+import { ICreateRidePayload } from "@/services/ride";
+import { RidePassengers } from "./components/RidePassengers";
+import { IUser } from "@/models/IUser";
 
 interface Props {
   trips: ITrip[];
   cars: ICar[];
+  passengers: IUser[];
   submitText: string;
-  onSubmit: (rideData: IRidePayload) => Promise<void>;
-  initialData?: IRidePayload;
+  onSubmit: (rideData: ICreateRidePayload) => Promise<void>;
+  initialData?: ICreateRidePayload;
 }
 
 export function RideForm({
   trips,
   cars,
+  passengers,
   submitText,
   onSubmit,
   initialData,
@@ -33,7 +37,8 @@ export function RideForm({
   const [rideData, setRideData] = useState(
     initialData ||
       ({
-        billIds: [],
+        bills: [],
+        observations: '',
         tripId: trips[0]._id,
         date: new Date().toISOString().slice(0, 10),
         paid: false,
@@ -91,45 +96,6 @@ export function RideForm({
           />
         </TextInput.Root>
       </FormControl>
-      <FormControl id="passengers" label="Nº de passageiros" errors={errors}>
-        <TextInput.Root>
-          <TextInput.Input
-            type="number"
-            value={rideData.passengers}
-            onChange={(e) =>
-              handleChangeValue(
-                "passengers",
-                e.target.value ? Number(e.target.value) : ""
-              )
-            }
-            placeholder="0"
-            required
-            min={0}
-            max={4}
-          />
-        </TextInput.Root>
-      </FormControl>
-      <FormControl
-        id="passengersOneWay"
-        label="Apenas ida ou volta"
-        errors={errors}
-      >
-        <TextInput.Root>
-          <TextInput.Input
-            type="number"
-            value={rideData.passengersOneWay}
-            onChange={(e) =>
-              handleChangeValue(
-                "passengersOneWay",
-                e.target.value ? Number(e.target.value) : ""
-              )
-            }
-            placeholder="0"
-            min={0}
-            max={4}
-          />
-        </TextInput.Root>
-      </FormControl>
       <FormControl
         id="pricePerPassenger"
         label="Preço por passageiro"
@@ -167,6 +133,17 @@ export function RideForm({
           />
         </TextInput.Root>
       </FormControl>
+      <RidePassengers
+        passengers={passengers}
+        rideData={rideData}
+        handleChangeValue={handleChangeValue}
+      />
+      <FormControl id="paid" label="Pago" errors={errors}>
+        <Switch
+          value={rideData.paid}
+          onChange={(value) => handleChangeValue("paid", !rideData.paid)}
+        />
+      </FormControl>
       <FormControl id="observations" label="Observações" errors={errors}>
         <TextInput.Root>
           <TextInput.Input
@@ -175,12 +152,6 @@ export function RideForm({
             placeholder="Digite alguma informação adicional..."
           />
         </TextInput.Root>
-      </FormControl>
-      <FormControl id="paid" label="Pago" errors={errors}>
-        <Switch
-          value={rideData.paid}
-          onChange={(value) => handleChangeValue("paid", !rideData.paid)}
-        />
       </FormControl>
       <Button disabled={loading}>
         {loading && <Loading className="mr-2" size="sm" />}

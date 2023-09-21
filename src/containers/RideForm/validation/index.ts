@@ -2,9 +2,9 @@ import {
   IValidationError,
   IValidationReturn,
 } from "@/models/IValidationReturn";
-import { IRidePayload } from "@/models/IRide";
+import { ICreateRidePayload, IRideBill } from "@/services/ride";
 
-export function isValidNewRide(ride: IRidePayload): IValidationReturn {
+export function isValidNewRide(ride: ICreateRidePayload): IValidationReturn {
   const errors: IValidationError[] = [];
   if (!ride.tripId) {
     errors.push({ field: "tripId", message: "Selecione um trajeto" });
@@ -14,18 +14,6 @@ export function isValidNewRide(ride: IRidePayload): IValidationReturn {
   }
   if (!ride.date) {
     errors.push({ field: "date", message: "Insira uma data" });
-  }
-  if (ride.passengers <= 0 || !ride.passengers) {
-    errors.push({
-      field: "passengers",
-      message: "O valor deve ser maior que zero",
-    });
-  }
-  if (ride.passengersOneWay < 0) {
-    errors.push({
-      field: "passengersOneWay",
-      message: "O valor não pode ser negativo",
-    });
   }
 
   if (ride.pricePerPassenger < 0 || !ride.pricePerPassenger) {
@@ -41,7 +29,44 @@ export function isValidNewRide(ride: IRidePayload): IValidationReturn {
       message: "O valor não pode ser negativo",
     });
   }
+  if (ride.bills.length > 0) {
+    ride.bills.forEach(bill => {
+      const { isValid } =isValidRideBill(bill);
+      if(!isValid) {
+        errors.push({
+          field: "bills",
+          message: "Passageiros inválidos",
+        });
+      }
+    })
+  }
 
+  return {
+    isValid: !errors.length,
+    errors,
+  };
+}
+
+export function isValidRideBill (passenger: IRideBill) {
+  const errors: IValidationError[] = [];
+  if (Number.isNaN(passenger.amount)) {
+    errors.push({
+      field: "amount",
+      message: "Preço por passageiro não definido",
+    });
+  }
+  if (passenger.amount <= 0) {
+    errors.push({
+      field: "amount",
+      message: "O valor deve ser positivo",
+    });
+  }
+  if (!passenger.description.trim() && !passenger.payerId) {
+    errors.push({
+      field: "payerId",
+      message: "Selecione o passageiro ou escreva na descrição",
+    });
+  }
   return {
     isValid: !errors.length,
     errors,
