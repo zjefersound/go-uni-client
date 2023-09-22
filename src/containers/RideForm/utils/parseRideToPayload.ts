@@ -10,11 +10,11 @@ export function parseRideToPayload(ride: IRide) {
     extraCosts: ride.extraCosts,
     observations: ride.observations,
     paid: ride.paid,
-    bills: ride.bills.map((bill) => ({
+    bills: (ride.bills || []).map((bill) => ({
       amount: bill.amount,
       payer: bill.payer,
       payerId: bill.payer?._id,
-      description: bill.description,
+      description: bill.description ?? "",
       paid: bill.paid,
       _id: bill._id,
       date: bill.date,
