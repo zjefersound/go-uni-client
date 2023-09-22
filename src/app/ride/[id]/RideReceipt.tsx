@@ -1,5 +1,4 @@
 import { Card } from "@/components/Card";
-import { SwitchPaid } from "./SwitchPaid";
 import { IRide } from "@/models/IRide";
 import { toCurrency } from "@/utils/toCurrency";
 import { arrayOfKeys } from "@/utils/arrayOfKeys";
@@ -13,10 +12,6 @@ export function RideReceipt({ ride }: { ride: IRide }) {
     <Card>
       <div className="flex items-center justify-between">
         <h2 className="font-bold">A receber:</h2>
-        <div className="flex items-center">
-          <span className="text-sm mr-2">Recebido:</span>
-          <SwitchPaid ride={ride} />
-        </div>
       </div>
       <div className="text-sm text-gray-600 mt-3">
         <p>Passageiros</p>
