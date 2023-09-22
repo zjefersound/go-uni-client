@@ -4,12 +4,12 @@ import {
 } from "@/models/IValidationReturn";
 import { ILoginPayload } from "..";
 
-export function isValidLogin(ride: ILoginPayload): IValidationReturn {
+export function isValidLogin(payload: ILoginPayload): IValidationReturn {
   const errors: IValidationError[] = [];
-  if (!ride.username.trim()) {
+  if (!payload.username.trim()) {
     errors.push({ field: "username", message: "Digite o username" });
   }
-  if (!ride.password) {
+  if (!payload.password) {
     errors.push({ field: "password", message: "Digite a sua senha" });
   }
 
