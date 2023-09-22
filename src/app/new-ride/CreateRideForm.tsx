@@ -5,9 +5,9 @@ import { useToast } from "@/hooks/useToast";
 import { ICar } from "@/models/ICar";
 import { ITrip } from "@/models/ITrip";
 import { useRouter } from "next/navigation";
-import { fetchWrapper } from "@/utils/fetch";
 import { ICreateRidePayload } from "@/services/ride";
 import { IUser } from "@/models/IUser";
+import { api } from "@/utils/api";
 
 interface Props {
   trips: ITrip[];
@@ -19,27 +19,22 @@ export function CreateRideForm({ trips, cars, passengers }: Props) {
   const { launchToast } = useToast();
 
   const onSubmit = (rideData: ICreateRidePayload) => {
-    return fetchWrapper("/ride", {
-      method: "POST",
-      credentials: "same-origin",
-      body: JSON.stringify({
-        date: rideData.date,
-        paid: rideData.paid,
-        tripId: rideData.tripId,
-        carId: rideData.carId,
-        pricePerPassenger: rideData.pricePerPassenger,
-        extraCosts: rideData.extraCosts || 0,
-        observations: rideData.observations,
-        bills: rideData.bills,
-        passengers: rideData.bills.filter(
-          (bill) => bill.amount === rideData.pricePerPassenger
-        ).length,
-        passengersOneWay: rideData.bills.filter(
-          (bill) => bill.amount === rideData.pricePerPassenger / 2
-        ).length,
-      }),
-    })
-      .then((res) => {
+    return api.post('/ride', {
+      date: rideData.date,
+      paid: rideData.paid,
+      tripId: rideData.tripId,
+      carId: rideData.carId,
+      pricePerPassenger: rideData.pricePerPassenger,
+      extraCosts: rideData.extraCosts || 0,
+      observations: rideData.observations,
+      bills: rideData.bills,
+      passengers: rideData.bills.filter(
+        (bill) => bill.amount === rideData.pricePerPassenger
+      ).length,
+      passengersOneWay: rideData.bills.filter(
+        (bill) => bill.amount === rideData.pricePerPassenger / 2
+      ).length,
+    }).then((res) => {
         launchToast({
           open: true,
           title: "Carona criada",
