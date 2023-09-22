@@ -2,7 +2,7 @@ import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessio
 import { IServiceOptions } from "@/models/IServiceOptions";
 import { IFuelSupplyPayload } from "@/models/IFuelSupply";
 import { groq } from "next-sanity";
-import FuelSupplyRepository from "../repositories/FuelSupplyRepository";
+import FuelSupplyRepository from "@/repositories/FuelRepository";
 
 const getFindByCarOwnerGroq = (userId: string) =>
   groq`[car._ref in *[_type=="car" && owner._ref=="${userId}"]._id ]`;
