@@ -23,5 +23,6 @@ export function getRideBillPayload(ride: ICreateRidePayload, bill: IRideBill) {
     description: bill.description,
     payerId: bill.payerId,
     receiverId: ride.driverId,
+    currency: bill.currency || "BRL",
   };
 }
