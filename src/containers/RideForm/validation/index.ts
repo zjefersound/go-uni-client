@@ -61,7 +61,7 @@ export function isValidRideBill (passenger: IRideBill) {
       message: "O valor deve ser positivo",
     });
   }
-  if (!passenger.description.trim() && !passenger.payerId) {
+  if (!passenger.description?.trim() && !passenger.payerId) {
     errors.push({
       field: "payerId",
       message: "Selecione o passageiro ou escreva na descrição",

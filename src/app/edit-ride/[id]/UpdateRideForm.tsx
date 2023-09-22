@@ -25,7 +25,8 @@ export function UpdateRideForm({ ride, cars, trips, passengers }: Props) {
   const onSubmit = (rideData: ICreateRidePayload) => {
     const payload = {
       ...rideData,
-      billsToDelete: ride.bills
+      extraCosts: rideData.extraCosts ?? 0,
+      billsToDelete: (ride.bills || [])
         .filter(
           (bill) =>
             bill._id &&
