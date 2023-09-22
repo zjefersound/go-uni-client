@@ -4,6 +4,29 @@ import { IRide } from "@/models/IRide";
 import { IServiceOptions } from "@/models/IServiceOptions";
 import BillRepository from "@/repositories/BillRepository";
 import RideRepository from "@/repositories/RideRepository";
+import { getRideBillPayload, getRidePayload } from "./utils/rideServiceUtils";
+
+export interface IRideBill extends Partial<IBill> {
+  amount: number;
+  description: string;
+  payerId?: string;
+}
+
+export interface ICreateRidePayload {
+  date: string;
+  paid: boolean;
+  tripId: string;
+  carId: string;
+  driverId: string;
+  pricePerPassenger: number;
+  extraCosts: number;
+  observations: string;
+  bills: IRideBill[];
+}
+
+export interface IPatchRidePayload extends ICreateRidePayload {
+  billsToDelete: string[];
+}
 
 const getToday = async () => {
   const user = await getSessionUser();
@@ -33,105 +56,52 @@ const getById: (id: string) => Promise<IRide> = (id) => {
   return RideRepository.getById(id);
 };
 
-export interface IRideBill extends Partial<IBill> {
-  amount: number;
-  description: string;
-  payerId?: string;
-}
-export interface ICreateRidePayload {
-  date: string;
-  paid: boolean;
-  tripId: string;
-  carId: string;
-  driverId: string;
-  pricePerPassenger: number;
-  extraCosts: number;
-  observations: string;
-  bills: IRideBill[];
-}
-
 const create = async (ride: ICreateRidePayload) => {
-  const payload: any = {
-    ...ride,
-    passengers: ride.bills.filter(
-      (bill) => bill.amount === ride.pricePerPassenger
-    ).length,
-    passengersOneWay: ride.bills.filter(
-      (bill) => bill.amount === ride.pricePerPassenger / 2
-    ).length,
-  };
-  delete payload.bills;
+  const payload: any = getRidePayload(ride);
   const bills = [];
+
+  // Create and save bills from payload
   for (const bill of ride.bills) {
-    const response = await BillRepository.create({
-      amount: bill.amount,
-      date: ride.date,
-      paid: bill.paid ?? false,
-      description: bill.description,
-      payerId: bill.payerId,
-      receiverId: ride.driverId,
-    });
+    const response = await BillRepository.create(
+      getRideBillPayload(ride, bill)
+    );
     bills.push(response);
   }
+
+  // Link bill ids to ride
   payload.billIds = bills.map((bill) => bill._id);
 
   return RideRepository.create(payload);
 };
 
-export interface IPatchRidePayload extends ICreateRidePayload {
-  billsToDelete: string[];
-}
-
 const patch = async (id: string, ride: IPatchRidePayload) => {
-  const payload: any = {
-    ...ride,
-    passengers: ride.bills.filter(
-      (bill) => bill.amount === ride.pricePerPassenger
-    ).length,
-    passengersOneWay: ride.bills.filter(
-      (bill) => bill.amount === ride.pricePerPassenger / 2
-    ).length,
-  };
-  delete payload.bills;
-  delete payload.billsToDelete;
+  const payload: any = getRidePayload(ride);
   const bills = [];
 
+  // Handle bills for a ride
   for (const bill of ride.bills) {
+    const billPayload = getRideBillPayload(ride, bill);
+    let response;
     if (bill._id) {
-      const response = await BillRepository.patch(bill._id, {
-        amount: bill.amount,
-        date: ride.date,
-        paid: bill.paid ?? false,
-        description: bill.description,
-        payerId: bill.payerId,
-        receiverId: ride.driverId,
-      });
-
-      bills.push(response);
+      // Update existent bill
+      response = await BillRepository.patch(bill._id, billPayload);
     } else {
-      const response = await BillRepository.create({
-        amount: bill.amount,
-        date: ride.date,
-        paid: bill.paid ?? false,
-        description: bill.description,
-        payerId: bill.payerId,
-        receiverId: ride.driverId,
-      });
-
-      bills.push(response);
+      // Create a new bill
+      response = await BillRepository.create(billPayload);
     }
+    bills.push(response);
   }
-
   payload.billIds = bills.map((bill) => bill._id);
-
   const result = await RideRepository.patch(id, payload);
 
+  // Delete bills after removing the reference from the ride
   for (const billId of ride.billsToDelete) {
     await BillRepository.delete(billId);
   }
 
   return result;
 };
+
 const handleDelete = async (id: string, billIds: string[]) => {
   const result = await RideRepository.delete(id);
   for (const billId of billIds) {
