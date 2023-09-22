@@ -9,18 +9,22 @@ import { IValidationError } from "@/models/IValidationReturn";
 import { ICreateRidePayload, IRideBill } from "@/services/ride";
 import React, { useState } from "react";
 import { isValidRideBill } from "../validation";
+import { TextButton } from "@/components/TextButton";
+import { AiOutlineDelete } from "react-icons/ai";
 
 interface Props {
   initialData?: IRideBill | null;
   passengers: IUser[];
   rideData: ICreateRidePayload;
   onSubmit: (value: IRideBill) => void;
+  onDelete: () => void 
 }
 export function RideBillForm({
   passengers,
   rideData,
   initialData,
   onSubmit,
+  onDelete,
 }: Props) {
   const defaultData = {
     payerId: "",
@@ -99,6 +103,7 @@ export function RideBillForm({
         {loading && <Loading className="mr-2" size="sm" />}
         {initialData ? "Salvar" : "Adicionar"}
       </Button>
+      {initialData && <TextButton type="danger" onClick={onDelete}><AiOutlineDelete className="mr-2" /> Remover</TextButton>}
     </form>
   );
 }

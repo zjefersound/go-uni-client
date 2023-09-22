@@ -6,8 +6,6 @@ export function parseRideToPayload(ride: IRide) {
     tripId: ride.trip._id,
     carId: ride.car._id,
     date: ride.date,
-    passengers: ride.passengers,
-    passengersOneWay: ride.passengersOneWay,
     pricePerPassenger: ride.pricePerPassenger,
     extraCosts: ride.extraCosts,
     observations: ride.observations,

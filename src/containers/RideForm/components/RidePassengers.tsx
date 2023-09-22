@@ -30,6 +30,12 @@ export function RidePassengers({
     handleChangeValue("bills", newBills);
   };
 
+  const onDeleteRideForm = () => {
+    const newBills = [...rideData.bills].filter((_, index) => index !== billToEditIndex);
+    handleChangeValue("bills", newBills);
+    setOpenModal(false)
+  };
+  
   const onSubmitRideForm = (bill: IRideBill) => {
     const newBills = [...rideData.bills];
     if (typeof billToEditIndex === "number") {
@@ -49,40 +55,46 @@ export function RidePassengers({
       </div>
       <ul className="flex flex-col space-y-2">
         {rideData.bills?.map((bill: IRideBill, index) => (
-          <li
-            key={bill._id}
-            className="flex items-center"
-            onClick={() => {
-              setOpenModal(true);
-              setBillToEditIndex(index);
-            }}
-          >
-            {bill.payer?.avatar ? (
-              <img
-                className="h-8 w-8 rounded-full mr-2"
-                src={urlFor(bill.payer?.avatar).url()}
-                alt={bill.payer?.name}
-              />
-            ) : (
-              <div className="flex items-center justify-center h-8 w-8 rounded-full bg-emerald-600 mr-2">
-                <AiOutlineUser className="text-white h-4 w-4" />
+          <li key={bill._id} className="flex items-center">
+            <div
+              className="flex flex-1 items-center"
+              onClick={() => {
+                setOpenModal(true);
+                setBillToEditIndex(index);
+              }}
+            >
+              {bill.payer?.avatar ? (
+                <img
+                  className="h-8 w-8 rounded-full mr-2"
+                  src={urlFor(bill.payer?.avatar).url()}
+                  alt={bill.payer?.name}
+                />
+              ) : (
+                <div className="flex items-center justify-center h-8 w-8 rounded-full bg-emerald-600 mr-2">
+                  <AiOutlineUser className="text-white h-4 w-4" />
+                </div>
+              )}
+              <div className="flex flex-col">
+                <p className="text-red-400">
+                  {bill.payer?.name || bill.description || "Convidado"}
+                </p>
+                <span className="text-xs text-gray-600">
+                  {bill.amount === rideData.pricePerPassenger
+                    ? "Ida e volta"
+                    : "Apenas ida (ou volta)"}
+                </span>
               </div>
-            )}
-            <div className="flex flex-col">
-              <p className="text-red-400">
-                {bill.payer?.name || bill.description || "Convidado"}
+              <p className="ml-auto mr-2 font-bold">
+                {toCurrency(bill.amount)}
               </p>
-              <span className="text-xs text-gray-600">
-                {bill.amount === rideData.pricePerPassenger
-                  ? "Ida e volta"
-                  : "Apenas ida (ou volta)"}
-              </span>
             </div>
-            <p className="ml-auto mr-2 font-bold">{toCurrency(bill.amount)}</p>
-            <Switch
-              value={bill.paid}
-              onChange={(value) => toggleBillPaid(index, !bill.paid)}
-            />
+            <div className="flex flex-col items-center">
+              <span className="text-xs text-gray-400 leading-1">Pago</span>
+              <Switch
+                value={bill.paid}
+                onChange={(value) => toggleBillPaid(index, !bill.paid)}
+              />
+            </div>
           </li>
         ))}
       </ul>
@@ -109,6 +121,7 @@ export function RidePassengers({
                   : null
               }
               onSubmit={onSubmitRideForm}
+              onDelete={onDeleteRideForm}
               passengers={passengers}
               rideData={rideData}
             />

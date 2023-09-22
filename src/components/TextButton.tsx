@@ -20,6 +20,7 @@ export function TextButton({ type = 'primary', children, onClick, className, ...
         "text-red-600 hover:text-red-400 active:text-red-300": type === "danger",
       })}
       onClick={onClick}
+      type="button"
       {...props}
     >
       {children}

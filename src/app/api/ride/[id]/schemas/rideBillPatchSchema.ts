@@ -5,5 +5,5 @@ export const rideBillPatchSchema = z.object({
   description: z.string(),
   payerId: z.string().min(36).optional(),
   paid: z.boolean().optional(),
-  _id: z.string().min(36).optional(),
+  _id: z.string().optional(),
 });

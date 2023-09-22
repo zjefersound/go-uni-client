@@ -44,8 +44,6 @@ export interface ICreateRidePayload {
   tripId: string;
   carId: string;
   driverId: string;
-  passengers: number;
-  passengersOneWay: number;
   pricePerPassenger: number;
   extraCosts: number;
   observations: string;
@@ -53,7 +51,15 @@ export interface ICreateRidePayload {
 }
 
 const create = async (ride: ICreateRidePayload) => {
-  const payload: any = { ...ride };
+  const payload: any = {
+    ...ride,
+    passengers: ride.bills.filter(
+      (bill) => bill.amount === ride.pricePerPassenger
+    ).length,
+    passengersOneWay: ride.bills.filter(
+      (bill) => bill.amount === ride.pricePerPassenger / 2
+    ).length,
+  };
   delete payload.bills;
   const bills = [];
   for (const bill of ride.bills) {
@@ -77,7 +83,15 @@ export interface IPatchRidePayload extends ICreateRidePayload {
 }
 
 const patch = async (id: string, ride: IPatchRidePayload) => {
-  const payload: any = { ...ride };
+  const payload: any = {
+    ...ride,
+    passengers: ride.bills.filter(
+      (bill) => bill.amount === ride.pricePerPassenger
+    ).length,
+    passengersOneWay: ride.bills.filter(
+      (bill) => bill.amount === ride.pricePerPassenger / 2
+    ).length,
+  };
   delete payload.bills;
   delete payload.billsToDelete;
   const bills = [];

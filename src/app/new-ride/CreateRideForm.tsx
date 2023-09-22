@@ -19,22 +19,14 @@ export function CreateRideForm({ trips, cars, passengers }: Props) {
   const { launchToast } = useToast();
 
   const onSubmit = (rideData: ICreateRidePayload) => {
-    return api.post('/ride', {
-      date: rideData.date,
-      paid: rideData.paid,
-      tripId: rideData.tripId,
-      carId: rideData.carId,
-      pricePerPassenger: rideData.pricePerPassenger,
-      extraCosts: rideData.extraCosts || 0,
-      observations: rideData.observations,
-      bills: rideData.bills,
-      passengers: rideData.bills.filter(
-        (bill) => bill.amount === rideData.pricePerPassenger
-      ).length,
-      passengersOneWay: rideData.bills.filter(
-        (bill) => bill.amount === rideData.pricePerPassenger / 2
-      ).length,
-    }).then((res) => {
+    const payload = {
+      ...rideData,
+      extraCosts: rideData.extraCosts ?? 0,
+    };
+    
+    return api
+      .post("/ride", payload)
+      .then((res) => {
         launchToast({
           open: true,
           title: "Carona criada",

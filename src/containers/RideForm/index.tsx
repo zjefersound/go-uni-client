@@ -38,7 +38,7 @@ export function RideForm({
     initialData ||
       ({
         bills: [],
-        observations: '',
+        observations: "",
         tripId: trips[0]._id,
         date: new Date().toISOString().slice(0, 10),
         paid: false,
@@ -110,9 +110,10 @@ export function RideForm({
             intlConfig={{ locale: "pt-BR", currency: "BRL" }}
             defaultValue={rideData.pricePerPassenger}
             decimalsLimit={2}
-            onValueChange={(_, name, values) =>
-              handleChangeValue("pricePerPassenger", values?.float || 0)
-            }
+            onValueChange={(_, name, values) => {
+              handleChangeValue("pricePerPassenger", values?.float || 0);
+              handleChangeValue("bills", []);
+            }}
             required
           />
         </TextInput.Root>

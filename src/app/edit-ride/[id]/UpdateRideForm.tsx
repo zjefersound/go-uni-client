@@ -9,6 +9,7 @@ import { IRide } from "@/models/IRide";
 import { ITrip } from "@/models/ITrip";
 import { IUser } from "@/models/IUser";
 import { ICreateRidePayload, rideService } from "@/services/ride";
+import { api } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { AiOutlineDelete } from "react-icons/ai";
 interface Props {
@@ -22,8 +23,19 @@ export function UpdateRideForm({ ride, cars, trips, passengers }: Props) {
   const { launchToast } = useToast();
 
   const onSubmit = (rideData: ICreateRidePayload) => {
-    return rideService
-      .patch(ride._id, rideData)
+    const payload = {
+      ...rideData,
+      billsToDelete: ride.bills
+        .filter(
+          (bill) =>
+            bill._id &&
+            !rideData.bills.some((payloadBill) => payloadBill._id === bill._id)
+        )
+        .map((b) => b._id),
+    };
+
+    return api
+      .patch(`/ride/${ride._id}`, payload)
       .then((res) => {
         launchToast({
           open: true,
