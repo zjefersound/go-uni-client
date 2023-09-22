@@ -7,3 +7,11 @@ export interface ICar {
   distancePerLiter: number;
   photo: ISanityImage;
 }
+
+export interface ICarPayload {
+  model: string;
+  freeSeats: number;
+  distancePerLiter: number;
+  ownerId: string;
+  photo: any;
+}

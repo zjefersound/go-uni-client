@@ -1,28 +1,20 @@
-import { sanityClient } from "@/configs/sanity";
-import { IUser } from "@/models/IUser";
-import { groq } from "next-sanity";
+import UserRepository from "@/repositories/UserRepository";
 
-const getById: (id: string) => Promise<IUser> = (id) => {
-  return sanityClient.fetch(groq`*[_type == "user"][_id == "${id}"][0]{
-    _id,
-    _createdAt,
-    name,
-    username,
-    email,
-    avatar,
-  }`);
+const getById = (id: string) => {
+  return UserRepository.getById(id);
+};
+const getAllPassengers = () => {
+  return UserRepository.getAll({
+    filters: [{ key: "role", operation: "==", value: "passenger" }],
+  });
 };
 
-const getPasswordByUsername: (
-  username: string
-) => Promise<{ _id: string; password: string; }> = (username) => {
-  return sanityClient.fetch(groq`*[_type == "user"][username == "${username}"][0]{
-    _id,
-    password,
-  }`);
+const getPasswordByUsername = (username: string) => {
+  return UserRepository.getPasswordByUsername(username);
 };
 
 export const userService = {
   getById,
-  getPasswordByUsername
+  getPasswordByUsername,
+  getAllPassengers,
 };

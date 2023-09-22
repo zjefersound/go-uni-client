@@ -6,7 +6,11 @@ import { Content } from "@/components/Content";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditFuelSupply({ params }: { params: { id: string } }) {
+export default async function EditFuelSupply({
+  params,
+}: {
+  params: { id: string };
+}) {
   const { id } = params;
   const fuelSupply = await fuelSupplyService.getById(id);
   const cars = await carService.getAll();

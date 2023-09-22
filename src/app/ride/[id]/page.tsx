@@ -1,8 +1,6 @@
 import { Card } from "@/components/Card";
 import { urlFor } from "@/configs/sanity";
-import { calculateRideTotal } from "@/logic/calculateRideTotal";
 import { rideService } from "@/services/ride";
-import { arrayOfKeys } from "@/utils/arrayOfKeys";
 import { toCurrency } from "@/utils/toCurrency";
 import { printDate } from "@/utils/date/printDate";
 import Link from "next/link";
@@ -15,10 +13,10 @@ import {
   AiOutlineEnvironment,
   AiOutlineClockCircle,
 } from "react-icons/ai";
-import { SwitchPaid } from "./SwitchPaid";
 import { fuelSupplyService } from "@/services/fuelSupply";
 import { ESTIMATED_FUEL_PRICE_PER_LITER } from "@/constants";
 import { calculateFuelCost } from "@/logic/calculateFuelCost";
+import { RideReceipt } from "./RideReceipt";
 
 export const dynamic = "force-dynamic";
 
@@ -118,9 +116,11 @@ export default async function Ride({ params }: { params: { id: string } }) {
       <Card>
         <h2 className="font-bold">Custos:</h2>
         <div className="mt-3">
-          <p className="text-sm text-gray-600">
-            Abastecido em: {printDate(lastFuelSupply.date)}
-          </p>
+          {lastFuelSupply?.date && (
+            <p className="text-sm text-gray-600">
+              Abastecido em: {printDate(lastFuelSupply.date)}
+            </p>
+          )}
           <p className="text-sm text-gray-600">
             Litro gasolina: {toCurrency(fuelPrice)}
           </p>
@@ -137,53 +137,7 @@ export default async function Ride({ params }: { params: { id: string } }) {
         </div>
       </Card>
 
-      <Card>
-        <div className="flex items-center justify-between">
-          <h2 className="font-bold">A receber:</h2>
-          <div className="flex items-center">
-            <span className="text-sm mr-2">Recebido:</span>
-            <SwitchPaid ride={ride} />
-          </div>
-        </div>
-
-        <div className="text-sm text-gray-600 mt-3">
-          <p>Passageiros</p>
-          <hr className="my-1" />
-          {arrayOfKeys(ride.passengers).map((index) => (
-            <div key={index} className="flex justify-between">
-              <p>+ passageiro {index + 1}:</p>
-              <p>{toCurrency(ride.pricePerPassenger)}</p>
-            </div>
-          ))}
-        </div>
-        {Boolean(ride.passengersOneWay) && (
-          <div className="text-sm text-gray-600 mt-3">
-            <p>Passageiros (apenas ida ou volta)</p>
-            <hr className="my-1" />
-            {arrayOfKeys(ride.passengersOneWay).map((index) => (
-              <div key={index} className="flex justify-between">
-                <p>+ passageiro {index + 1}:</p>
-                <p>{toCurrency(ride.pricePerPassenger / 2)}</p>
-              </div>
-            ))}
-          </div>
-        )}
-
-        <div className="text-sm text-gray-600 mt-3">
-          <div className="flex justify-between">
-            <p>+ Custos extras:</p>
-            <p>{toCurrency(ride.extraCosts)}</p>
-          </div>
-        </div>
-
-        <hr className="my-1 border-emerald-600" />
-        <div className=" text-emerald-600">
-          <div className="flex justify-between">
-            <p>Total</p>
-            <p>{toCurrency(calculateRideTotal(ride))}</p>
-          </div>
-        </div>
-      </Card>
+      <RideReceipt ride={ride} />
     </>
   );
 }

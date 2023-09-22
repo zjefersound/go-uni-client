@@ -1,11 +1,11 @@
-import { sanityClient } from "@/configs/sanity";
-import { ICar } from "@/models/ICar";
-import { groq } from "next-sanity";
+import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessionUser";
+import CarRepository from "@/repositories/CarRepository";
 
-const getAll: () => Promise<ICar[]> = () => {
-  return sanityClient.fetch(groq`*[_type == "car"]{
-    ...
-  }`);
+const getAll = async () => {
+  const user = await getSessionUser();
+  return CarRepository.getAll({
+    filters: [{ key: "owner._id", operation: "==", value: user.id }],
+  });
 };
 
 export const carService = {

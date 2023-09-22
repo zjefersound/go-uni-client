@@ -8,4 +8,14 @@ export interface IUser {
   email: string;
   password?: string;
   avatar: ISanityImage;
+  role: string;
+}
+
+export interface IUserPayload {
+  username: string;
+  name: string;
+  email: string;
+  password?: string;
+  avatar: any;
+  role: string;
 }

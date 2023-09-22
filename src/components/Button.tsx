@@ -6,6 +6,7 @@ interface Props {
   onClick?: any;
   className?: string;
   disabled?: boolean;
+  type?: "button" | "reset" | "submit";
 }
 
 export function Button({ children, onClick, className, ...props }: Props) {
