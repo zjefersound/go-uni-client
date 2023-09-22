@@ -41,6 +41,7 @@ export function UpdateFuelSupplyForm({ fuelSupply, cars }: Props) {
         });
       });
   };
+
   const onDelete = () => {
     fuelSupplyService
       .delete(fuelSupply._id)
