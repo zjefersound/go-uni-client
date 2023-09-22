@@ -6,7 +6,7 @@ interface Props {
 }
 export function Label({ id, children }: Props) {
   return (
-    <label htmlFor={id} className="text-gray-700 font-bold">
+    <label htmlFor={id} className="flex text-gray-700 font-bold">
       {children}
     </label>
   );
