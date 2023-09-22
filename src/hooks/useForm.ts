@@ -10,9 +10,9 @@ interface Props {
   onSubmit: (data: any) => Promise<any>;
   validator: (data: any) => IValidationReturn;
 }
-export function useForm<T=unknown>({
+export function useForm<T = unknown>({
   initialData,
-  defaultData,
+  defaultData = {},
   onSubmit,
   validator,
 }: Props) {
@@ -37,8 +37,9 @@ export function useForm<T=unknown>({
       setLoading(false);
     } else {
       setErrors([]);
-      setData(defaultData);
-      onSubmit(data).finally(() => setLoading(false));
+      onSubmit(data).finally(() => {
+        setLoading(false);
+      });
     }
   };
 
