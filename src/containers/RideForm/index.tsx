@@ -1,5 +1,4 @@
 "use client";
-import { FormEvent, useState } from "react";
 import { SelectTrip } from "../components/SelectTrip";
 import { ITrip } from "@/models/ITrip";
 import { ICar } from "@/models/ICar";
@@ -9,64 +8,51 @@ import { AiOutlineDollar } from "react-icons/ai";
 import { Switch } from "@/components/forms/Switch";
 import { Button } from "@/components/Button";
 import { isValidNewRide } from "./validation";
-import { IValidationError } from "@/models/IValidationReturn";
-import { IRidePayload } from "@/services/ride";
 import { FormControl } from "@/components/forms/FormControl";
 import { Loading } from "@/components/Loading";
+import { ICreateRidePayload } from "@/services/ride";
+import { RidePassengers } from "./components/RidePassengers";
+import { IUser } from "@/models/IUser";
+import { useForm } from "@/hooks/useForm";
 
 interface Props {
   trips: ITrip[];
   cars: ICar[];
+  passengers: IUser[];
   submitText: string;
-  onSubmit: (rideData: IRidePayload) => Promise<void>;
-  initialData?: IRidePayload;
+  onSubmit: (rideData: ICreateRidePayload) => Promise<void>;
+  initialData?: ICreateRidePayload;
 }
 
 export function RideForm({
   trips,
   cars,
+  passengers,
   submitText,
   onSubmit,
   initialData,
 }: Props) {
-  const [loading, setLoading] = useState(false);
-  const [rideData, setRideData] = useState(
-    initialData ||
-      ({
-        tripId: trips[0]._id,
-        date: new Date().toISOString().slice(0, 10),
-        paid: false,
-      } as any)
-  );
-
-  const [errors, setErrors] = useState<IValidationError[]>([]);
-
-  const handleChangeValue = (id: string, value: any) => {
-    setRideData((d: any) => ({ ...d, [id]: value }));
-    const newErrors = errors.filter((error) => error.field !== id);
-    setErrors(newErrors);
+  const defaultData = {
+    bills: [],
+    observations: "",
+    tripId: trips[0]._id,
+    date: new Date().toISOString().slice(0, 10),
+    paid: false,
   };
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    const { isValid, errors: newErrors } = isValidNewRide(rideData);
-
-    if (!isValid) {
-      setErrors(newErrors);
-      setLoading(false);
-    } else {
-      setErrors([]);
-      onSubmit(rideData).finally(() => setLoading(false));
-    }
-  };
+  const { data, loading, errors, handleChangeValue, handleSubmit } =
+    useForm<ICreateRidePayload>({
+      defaultData,
+      initialData,
+      onSubmit,
+      validator: isValidNewRide,
+    });
 
   return (
     <form className="space-y-3 flex flex-col" onSubmit={handleSubmit}>
       <FormControl id="tripId" label="Trajeto" errors={errors}>
         <SelectTrip
           items={trips}
-          value={rideData.tripId}
+          value={data.tripId}
           onChange={(value) => handleChangeValue("tripId", value)}
           required
         />
@@ -74,7 +60,7 @@ export function RideForm({
       <FormControl id="carId" label="Carro" errors={errors}>
         <SelectCar
           items={cars}
-          value={rideData.carId}
+          value={data.carId}
           onChange={(value) => handleChangeValue("carId", value)}
           required
         />
@@ -83,49 +69,10 @@ export function RideForm({
         <TextInput.Root>
           <TextInput.Input
             type="date"
-            value={rideData.date}
+            value={data.date}
             onChange={(e) => handleChangeValue("date", e.target.value)}
             placeholder="mm/dd/yyyy"
             required
-          />
-        </TextInput.Root>
-      </FormControl>
-      <FormControl id="passengers" label="Nº de passageiros" errors={errors}>
-        <TextInput.Root>
-          <TextInput.Input
-            type="number"
-            value={rideData.passengers}
-            onChange={(e) =>
-              handleChangeValue(
-                "passengers",
-                e.target.value ? Number(e.target.value) : ""
-              )
-            }
-            placeholder="0"
-            required
-            min={0}
-            max={4}
-          />
-        </TextInput.Root>
-      </FormControl>
-      <FormControl
-        id="passengersOneWay"
-        label="Apenas ida ou volta"
-        errors={errors}
-      >
-        <TextInput.Root>
-          <TextInput.Input
-            type="number"
-            value={rideData.passengersOneWay}
-            onChange={(e) =>
-              handleChangeValue(
-                "passengersOneWay",
-                e.target.value ? Number(e.target.value) : ""
-              )
-            }
-            placeholder="0"
-            min={0}
-            max={4}
           />
         </TextInput.Root>
       </FormControl>
@@ -141,11 +88,12 @@ export function RideForm({
           <TextInput.Currency
             placeholder="0,00"
             intlConfig={{ locale: "pt-BR", currency: "BRL" }}
-            defaultValue={rideData.pricePerPassenger}
+            defaultValue={data.pricePerPassenger}
             decimalsLimit={2}
-            onValueChange={(_, name, values) =>
-              handleChangeValue("pricePerPassenger", values?.float || 0)
-            }
+            onValueChange={(_, name, values) => {
+              handleChangeValue("pricePerPassenger", values?.float || 0);
+              handleChangeValue("bills", []);
+            }}
             required
           />
         </TextInput.Root>
@@ -158,7 +106,7 @@ export function RideForm({
           <TextInput.Currency
             placeholder="0,00"
             intlConfig={{ locale: "pt-BR", currency: "BRL" }}
-            defaultValue={rideData.extraCosts}
+            defaultValue={data.extraCosts}
             decimalsLimit={2}
             onValueChange={(_, name, values) =>
               handleChangeValue("extraCosts", values?.float || 0)
@@ -166,20 +114,25 @@ export function RideForm({
           />
         </TextInput.Root>
       </FormControl>
+      <RidePassengers
+        passengers={passengers}
+        rideData={data}
+        handleChangeValue={handleChangeValue}
+      />
+      <FormControl id="paid" label="Pago" errors={errors}>
+        <Switch
+          value={data.paid}
+          onChange={(value) => handleChangeValue("paid", !data.paid)}
+        />
+      </FormControl>
       <FormControl id="observations" label="Observações" errors={errors}>
         <TextInput.Root>
           <TextInput.Input
-            value={rideData.observations}
+            value={data.observations}
             onChange={(e) => handleChangeValue("observations", e.target.value)}
             placeholder="Digite alguma informação adicional..."
           />
         </TextInput.Root>
-      </FormControl>
-      <FormControl id="paid" label="Pago" errors={errors}>
-        <Switch
-          value={rideData.paid}
-          onChange={(value) => handleChangeValue("paid", !rideData.paid)}
-        />
       </FormControl>
       <Button disabled={loading}>
         {loading && <Loading className="mr-2" size="sm" />}

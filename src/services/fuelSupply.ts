@@ -1,82 +1,48 @@
-import { sanityClient } from "@/configs/sanity";
-import { IFuelSupply } from "@/models/IFuelSupply";
+import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessionUser";
 import { IServiceOptions } from "@/models/IServiceOptions";
-import { filtersToGroq } from "@/utils/filtersToGroq";
+import { IFuelSupplyPayload } from "@/models/IFuelSupply";
 import { groq } from "next-sanity";
+import FuelSupplyRepository from "@/repositories/FuelSupplyRepository";
 
-export interface IFuelSupplyPayload {
-  date: string;
-  carId: string;
-  price: number;
-  pricePerLiter: number;
-}
+const getFindByCarOwnerGroq = (userId: string) =>
+  groq`[car._ref in *[_type=="car" && owner._ref=="${userId}"]._id ]`;
 
-const getAll: (options?: IServiceOptions) => Promise<IFuelSupply[]> = ({
-  filters,
-} = {}) => {
-  return sanityClient.fetch(groq`*[_type == "fuelSupply"] ${filtersToGroq(
-    filters
-  )} | order(date desc) {
-    ...,
-    car -> {
-      ...
-    }
-  }`);
-};
-
-const getById: (id: string) => Promise<IFuelSupply> = (id) => {
-  return sanityClient.fetch(groq`*[_type == "fuelSupply"][_id == "${id}"][0]{
-    _id,
-    _createdAt,
-    date,
-    price,
-    pricePerLiter,
-    car -> {
-      ...
-    },
-  }`);
-};
-
-const getLastUntilDate: (date: string) => Promise<IFuelSupply> = (date) => {
-  return sanityClient.fetch(groq`*[_type == "fuelSupply"][date <= "${date}"] | order(date desc)[0]{
-    ...
-  }`);
-};
-
-const create = (fuelSupply: IFuelSupplyPayload) => {
-  return sanityClient.create({
-    _type: "fuelSupply",
-    date: fuelSupply.date,
-    pricePerLiter: fuelSupply.pricePerLiter,
-    price: fuelSupply.price,
-    car: {
-      _ref: fuelSupply.carId,
-      _type: "reference",
-    },
+const getAll = async ({ filters }: IServiceOptions = {}) => {
+  const user = await getSessionUser();
+  return FuelSupplyRepository.getAll({
+    filters,
+    rawGroq: getFindByCarOwnerGroq(user.id),
   });
 };
 
-const patch = (id: string, fuelSupply: IFuelSupplyPayload) => {
-  const payload: any = { ...fuelSupply };
-
-  if (fuelSupply.carId) {
-    payload.car = {
-      _ref: fuelSupply.carId,
-      _type: "reference",
-    };
-    delete payload.carId;
-  }
-  return sanityClient.patch(id).set(payload).commit();
+const getById = (id: string) => {
+  return FuelSupplyRepository.getById(id);
 };
+
+const getLastUntilDate = async (date: string) => {
+  const user = await getSessionUser();
+  return FuelSupplyRepository.getLastUntilDate(date, {
+    rawGroq: getFindByCarOwnerGroq(user.id),
+  });
+};
+
+const create = (fuelSupply: IFuelSupplyPayload) => {
+  return FuelSupplyRepository.create(fuelSupply);
+};
+
+const patch = (id: string, fuelSupply: IFuelSupplyPayload) => {
+  return FuelSupplyRepository.patch(id, fuelSupply);
+};
+
 const handleDelete = (id: string) => {
-  return sanityClient.delete(id);
+  return FuelSupplyRepository.delete(id);
 };
 
 export const fuelSupplyService = {
   getAll,
   getById,
-  getLastUntilDate,
   create,
   patch,
   delete: handleDelete,
+  getLastUntilDate,
 };

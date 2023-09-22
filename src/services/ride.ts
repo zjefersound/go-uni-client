@@ -1,166 +1,122 @@
-import { sanityClient } from "@/configs/sanity";
+import { getSessionUser } from "@/app/api/auth/[...nextauth]/functions/getSessionUser";
+import { IBill } from "@/models/IBill";
 import { IRide } from "@/models/IRide";
 import { IServiceOptions } from "@/models/IServiceOptions";
-import { dateToString } from "@/utils/date/dateToString";
-import { filtersToGroq } from "@/utils/filtersToGroq";
-import { groq } from "next-sanity";
+import BillRepository from "@/repositories/BillRepository";
+import RideRepository from "@/repositories/RideRepository";
+import { getRideBillPayload, getRidePayload } from "./utils/rideServiceUtils";
 
-export interface IRidePayload {
+export interface IRideBill extends Partial<IBill> {
+  amount: number;
+  description: string;
+  payerId?: string;
+}
+
+export interface ICreateRidePayload {
   date: string;
   paid: boolean;
   tripId: string;
   carId: string;
-  passengers: number;
-  passengersOneWay: number;
+  driverId: string;
   pricePerPassenger: number;
   extraCosts: number;
   observations: string;
-}
-export interface IRidePatchPayload {
-  date?: string;
-  paid?: boolean;
-  tripId?: string;
-  carId?: string;
-  passengers?: number;
-  passengersOneWay?: number;
-  pricePerPassenger?: number;
-  extraCosts?: number;
-  observations?: string;
+  bills: IRideBill[];
 }
 
-const getToday: () => Promise<IRide> = () => {
-  return sanityClient.fetch(groq`*[_type == "ride"][date == "${
-    new Date().toISOString().split("T")[0]
-  }"][0]{
-    _id,
-    _createdAt,
-    passengers,
-    passengersOneWay,
-    date,
-    pricePerPassenger,
-    extraCosts,
-    observations,
-    paid,
-    car -> {
-      ...
-    },
-    trip -> {
-      ...
-    }
-  }`);
-};
+export interface IPatchRidePayload extends ICreateRidePayload {
+  billsToDelete: string[];
+}
 
-const getRecents: () => Promise<IRide[]> = () => {
-  return sanityClient.fetch(groq`*[_type == "ride"][date != "${dateToString(
-    new Date()
-  )}"] | order(date desc)[0..2]{
-    _id,
-    _createdAt,
-    passengers,
-    passengersOneWay,
-    date,
-    pricePerPassenger,
-    extraCosts,
-    observations,
-    paid,
-    car -> {
-      ...
-    },
-    trip -> {
-      ...
-    }
-  }`);
-};
-
-const getAll: (options?: IServiceOptions) => Promise<IRide[]> = ({
-  filters,
-} = {}) => {
-  return sanityClient.fetch(groq`*[_type == "ride"] ${filtersToGroq(
-    filters
-  )} | order(date desc){
-    _id,
-    _createdAt,
-    passengers,
-    passengersOneWay,
-    date,
-    pricePerPassenger,
-    extraCosts,
-    observations,
-    paid,
-    car -> {
-      ...
-    },
-    trip -> {
-      ...
-    }
-  }`);
-};
-
-const getById: (id: string) => Promise<IRide> = (id) => {
-  return sanityClient.fetch(groq`*[_type == "ride"][_id == "${id}"][0]{
-    _id,
-    _createdAt,
-    passengers,
-    passengersOneWay,
-    date,
-    pricePerPassenger,
-    extraCosts,
-    observations,
-    paid,
-    car -> {
-      ...
-    },
-    trip -> {
-      ...
-    }
-  }`);
-};
-
-const create = (ride: IRidePayload) => {
-  return sanityClient.create({
-    _type: "ride",
-    date: ride.date,
-    passengers: ride.passengers,
-    passengersOneWay: ride.passengersOneWay,
-    pricePerPassenger: ride.pricePerPassenger,
-    extraCosts: ride.extraCosts,
-    observations: ride.observations,
-    paid: ride.paid,
-    trip: {
-      _ref: ride.tripId,
-      _type: "reference",
-    },
-    car: {
-      _ref: ride.carId,
-      _type: "reference",
-    },
+const getToday = async () => {
+  const user = await getSessionUser();
+  return RideRepository.getToday({
+    filters: [{ key: "driver._id", operation: "==", value: user.id }],
   });
 };
 
-const patch = (id: string, ride: IRidePatchPayload) => {
-  const payload: any = { ...ride };
-  if (ride.tripId) {
-    payload.trip = {
-      _ref: ride.tripId,
-      _type: "reference",
-    };
-    delete payload.tripId;
+const getRecents = async () => {
+  const user = await getSessionUser();
+  return RideRepository.getRecents({
+    filters: [{ key: "driver._id", operation: "==", value: user.id }],
+  });
+};
+
+const getAll = async ({ filters = [] }: IServiceOptions = {}) => {
+  const user = await getSessionUser();
+  return RideRepository.getAll({
+    filters: [
+      { key: "driver._id", operation: "==", value: user.id },
+      ...filters,
+    ],
+  });
+};
+
+const getById: (id: string) => Promise<IRide> = (id) => {
+  return RideRepository.getById(id);
+};
+
+const create = async (ride: ICreateRidePayload) => {
+  const payload: any = getRidePayload(ride);
+  const bills = [];
+
+  // Create and save bills from payload
+  for (const bill of ride.bills) {
+    const response = await BillRepository.create(
+      getRideBillPayload(ride, bill)
+    );
+    bills.push(response);
   }
-  if (ride.carId) {
-    payload.car = {
-      _ref: ride.carId,
-      _type: "reference",
-    };
-    delete payload.carId;
+
+  // Link bill ids to ride
+  payload.billIds = bills.map((bill) => bill._id);
+
+  return RideRepository.create(payload);
+};
+
+const patch = async (id: string, ride: IPatchRidePayload) => {
+  const payload: any = getRidePayload(ride);
+  const bills = [];
+
+  // Handle bills for a ride
+  for (const bill of ride.bills) {
+    const billPayload = getRideBillPayload(ride, bill);
+    let response;
+    if (bill._id) {
+      // Update existent bill
+      response = await BillRepository.patch(bill._id, billPayload);
+    } else {
+      // Create a new bill
+      response = await BillRepository.create(billPayload);
+    }
+    bills.push(response);
   }
-  return sanityClient.patch(id).set(payload).commit();
+  payload.billIds = bills.map((bill) => bill._id);
+  const result = await RideRepository.patch(id, payload);
+
+  // Delete bills after removing the reference from the ride
+  for (const billId of ride.billsToDelete) {
+    await BillRepository.delete(billId);
+  }
+
+  return result;
+};
+
+const handleDelete = async (id: string, billIds: string[]) => {
+  const result = await RideRepository.delete(id);
+  for (const billId of billIds) {
+    await BillRepository.delete(billId);
+  }
+
+  return result;
 };
 
 export const rideService = {
-  getToday,
   getAll,
-  getRecents,
   getById,
   create,
   patch,
+  delete: handleDelete,
+  getToday,
+  getRecents,
 };

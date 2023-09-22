@@ -3,7 +3,8 @@
 import { FuelSupplyForm } from "@/containers/FuelSupplyForm";
 import { useToast } from "@/hooks/useToast";
 import { ICar } from "@/models/ICar";
-import { IFuelSupplyPayload, fuelSupplyService } from "@/services/fuelSupply";
+import { IFuelSupplyPayload } from "@/models/IFuelSupply";
+import { fuelSupplyService } from "@/services/fuelSupply";
 import { useRouter } from "next/navigation";
 
 interface Props {
