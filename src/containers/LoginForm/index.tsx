@@ -1,12 +1,11 @@
 "use client";
-import { FormEvent, useState } from "react";
 import { TextInput } from "@/components/forms/TextInput";
 import { AiOutlineUser, AiOutlineLock } from "react-icons/ai";
 import { Button } from "@/components/Button";
 import { isValidLogin } from "./validation";
-import { IValidationError } from "@/models/IValidationReturn";
 import { FormControl } from "@/components/forms/FormControl";
 import { Loading } from "@/components/Loading";
+import { useForm } from "@/hooks/useForm";
 
 interface Props {
   submitText: string;
@@ -19,30 +18,11 @@ export interface ILoginPayload {
 }
 
 export function LoginForm({ submitText, onSubmit }: Props) {
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState({} as any);
-
-  const [errors, setErrors] = useState<IValidationError[]>([]);
-
-  const handleChangeValue = (id: string, value: any) => {
-    setData((d: any) => ({ ...d, [id]: value }));
-    const newErrors = errors.filter((error) => error.field !== id);
-    setErrors(newErrors);
-  };
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    const { isValid, errors: newErrors } = isValidLogin(data);
-
-    if (!isValid) {
-      setErrors(newErrors);
-      setLoading(false);
-    } else {
-      setErrors([]);
-      onSubmit(data).finally(() => setLoading(false));
-    }
-  };
+  const { data, loading, errors, handleChangeValue, handleSubmit } =
+    useForm<ILoginPayload>({
+      onSubmit,
+      validator: isValidLogin,
+    });
 
   return (
     <form className="space-y-3 flex flex-col" onSubmit={handleSubmit}>

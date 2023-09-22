@@ -5,19 +5,18 @@ import { Switch } from "@/components/forms/Switch";
 import { TextInput } from "@/components/forms/TextInput";
 import { SelectUser } from "@/containers/components/SelectUser";
 import { IUser } from "@/models/IUser";
-import { IValidationError } from "@/models/IValidationReturn";
 import { ICreateRidePayload, IRideBill } from "@/services/ride";
-import React, { useState } from "react";
 import { isValidRideBill } from "../validation";
 import { TextButton } from "@/components/TextButton";
 import { AiOutlineDelete } from "react-icons/ai";
+import { useForm } from "@/hooks/useForm";
 
 interface Props {
   initialData?: IRideBill | null;
   passengers: IUser[];
   rideData: ICreateRidePayload;
   onSubmit: (value: IRideBill) => void;
-  onDelete: () => void 
+  onDelete: () => void;
 }
 export function RideBillForm({
   passengers,
@@ -31,44 +30,30 @@ export function RideBillForm({
     amount: rideData.pricePerPassenger,
     description: "",
   };
-  const [loading, setLoading] = useState(false);
-  const [passengerData, setPassengerData] = useState<IRideBill>(
-    initialData || defaultData
-  );
-  const isOneWay = passengerData.amount !== rideData.pricePerPassenger;
-  const [errors, setErrors] = useState<IValidationError[]>([]);
+  const { data, loading, errors, handleChangeValue, handleSubmit } =
+    useForm<IRideBill>({
+      defaultData,
+      initialData,
+      onSubmit: (data) => {
+        return new Promise(() => {
+          const bill = {
+            ...data,
+          };
+          if (bill.payerId === "") {
+            delete bill.payerId;
+          }
+          onSubmit(bill);
+        });
+      },
+      validator: isValidRideBill,
+    });
+  const isOneWay = data.amount !== rideData.pricePerPassenger;
 
-  const handleChangeValue = (id: string, value: any) => {
-    setPassengerData((d: any) => ({ ...d, [id]: value }));
-    const newErrors = errors.filter((error) => error.field !== id);
-    setErrors(newErrors);
-  };
-
-  const handleSubmit = () => {
-    setLoading(true);
-    const { isValid, errors: newErrors } = isValidRideBill(passengerData);
-
-    if (!isValid) {
-      setErrors(newErrors);
-      setLoading(false);
-    } else {
-      setErrors([]);
-      const bill = {
-        ...passengerData,
-      };
-      if (bill.payerId === "") {
-        delete bill.payerId;
-      }
-      onSubmit(bill);
-      setPassengerData(defaultData);
-      setLoading(false);
-    }
-  };
   return (
     <form className="flex flex-col space-y-3">
       <FormControl id="payerId" label="Passageiro" optional errors={errors}>
         <SelectUser
-          value={passengerData.payerId!}
+          value={data.payerId!}
           onChange={(value) => {
             handleChangeValue("payerId", value);
             handleChangeValue(
@@ -82,7 +67,7 @@ export function RideBillForm({
       <FormControl id="description" label="Descrição" errors={errors}>
         <TextInput.Root>
           <TextInput.Input
-            value={passengerData.description}
+            value={data.description}
             onChange={(e) => handleChangeValue("description", e.target.value)}
             placeholder="Nome do passageiro não cadastrado..."
           />
@@ -103,7 +88,11 @@ export function RideBillForm({
         {loading && <Loading className="mr-2" size="sm" />}
         {initialData ? "Salvar" : "Adicionar"}
       </Button>
-      {initialData && <TextButton type="danger" onClick={onDelete}><AiOutlineDelete className="mr-2" /> Remover</TextButton>}
+      {initialData && (
+        <TextButton type="danger" onClick={onDelete}>
+          <AiOutlineDelete className="mr-2" /> Remover
+        </TextButton>
+      )}
     </form>
   );
 }
