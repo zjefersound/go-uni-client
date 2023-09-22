@@ -7,7 +7,6 @@ import { Skeleton } from "@/components/Skeleton";
 import { urlFor } from "@/configs/sanity";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React from "react";
 import { AiOutlineLogout } from "react-icons/ai";
 
 export default function Profile() {

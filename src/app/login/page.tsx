@@ -3,7 +3,6 @@ import { ILoginPayload, LoginForm } from "@/containers/LoginForm";
 import { useToast } from "@/hooks/useToast";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import React from "react";
 import { AiOutlineCar } from "react-icons/ai";
 
 export default function Login() {

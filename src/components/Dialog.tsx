@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { AiOutlineClose } from "react-icons/ai";
 
