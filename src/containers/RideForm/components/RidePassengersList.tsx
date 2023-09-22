@@ -39,9 +39,7 @@ export function RidePassengersList({
               </div>
             )}
             <div className="flex flex-col">
-              <p className="text-red-400">
-                {bill.payer?.name || bill.description || "Convidado"}
-              </p>
+              <p>{bill.payer?.name || bill.description || "Convidado"}</p>
               <span className="text-xs text-gray-600">
                 {bill.amount === rideData.pricePerPassenger
                   ? "Ida e volta"
