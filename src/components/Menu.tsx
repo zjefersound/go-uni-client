@@ -3,7 +3,7 @@ import { AiOutlineHistory, AiOutlineHome, AiOutlineUser } from "react-icons/ai";
 import { useState } from "react";
 import { Drawer } from "./Drawer";
 import Link from "next/link";
-import { PiGasPump } from "react-icons/pi";
+import { PiGasPump, PiWallet } from "react-icons/pi";
 
 const defaultMenus = [
   {
@@ -20,6 +20,11 @@ const defaultMenus = [
     path: "/fuel-supplies",
     Icon: PiGasPump,
     label: "Abastecimentos",
+  },
+  {
+    path: "/pending-bills",
+    Icon: PiWallet,
+    label: "Contas a receber",
   },
   {
     path: "/profile",
