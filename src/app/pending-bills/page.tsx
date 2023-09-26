@@ -17,6 +17,7 @@ export default async function Bills() {
   return (
     <>
       <TotalBillReceipt groupedBills={groupedBills} bills={bills} />
+      <h2 className="font-bold">Contas por passageiro:</h2>
       {Object.entries(groupedBills).map(([key, bills]) => (
         <PassengerReceipt key={key} bills={bills} />
       ))}

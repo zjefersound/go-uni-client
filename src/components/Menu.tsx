@@ -22,7 +22,7 @@ const defaultMenus = [
     label: "Abastecimentos",
   },
   {
-    path: "/bills",
+    path: "/pending-bills",
     Icon: PiWallet,
     label: "Contas a receber",
   },
