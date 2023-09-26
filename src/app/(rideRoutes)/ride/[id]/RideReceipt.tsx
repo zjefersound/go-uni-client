@@ -3,16 +3,13 @@ import { IRide } from "@/models/IRide";
 import { toCurrency } from "@/utils/toCurrency";
 import { arrayOfKeys } from "@/utils/arrayOfKeys";
 import { calculateRideTotal } from "@/logic/calculateRideTotal";
-import {
-  AiOutlineCheck,
-} from "react-icons/ai";
+import { AiOutlineCheck } from "react-icons/ai";
 
 export function RideReceipt({ ride }: { ride: IRide }) {
   return (
     <Card>
-      <div className="flex items-center justify-between">
-        <h2 className="font-bold">A receber:</h2>
-      </div>
+      <h2 className="font-bold">A receber:</h2>
+
       <div className="text-sm text-gray-600 mt-3">
         <p>Passageiros</p>
         <hr className="my-1" />
@@ -21,7 +18,9 @@ export function RideReceipt({ ride }: { ride: IRide }) {
           .map((bill) => (
             <div key={bill._id} className="flex items-center">
               <p>+ {bill.payer?.name || bill.description || "Convidado"}</p>
-              {bill.paid && <AiOutlineCheck className="bg-emerald-600 text-white ml-1 rounded" />}
+              {bill.paid && (
+                <AiOutlineCheck className="bg-emerald-600 text-white ml-1 rounded" />
+              )}
               <p className="ml-auto">{toCurrency(bill.amount)}</p>
             </div>
           ))}
@@ -39,20 +38,23 @@ export function RideReceipt({ ride }: { ride: IRide }) {
           <p>Passageiros (apenas ida ou volta)</p>
           <hr className="my-1" />
           {ride.bills
-            ?.filter((bill) => bill.amount === ride.pricePerPassenger/2)
+            ?.filter((bill) => bill.amount === ride.pricePerPassenger / 2)
             .map((bill) => (
               <div key={bill._id} className="flex items-center">
                 <p>+ {bill.payer?.name || bill.description || "Convidado"}</p>
-                {bill.paid && <AiOutlineCheck className="bg-emerald-600 text-white ml-1 rounded" />}
+                {bill.paid && (
+                  <AiOutlineCheck className="bg-emerald-600 text-white ml-1 rounded" />
+                )}
                 <p className="ml-auto">{toCurrency(bill.amount)}</p>
               </div>
             ))}
-          {!ride.bills && arrayOfKeys(ride.passengersOneWay).map((index) => (
-            <div key={index} className="flex justify-between">
-              <p>+ passageiro {index + 1}:</p>
-              <p>{toCurrency(ride.pricePerPassenger / 2)}</p>
-            </div>
-          ))}
+          {!ride.bills &&
+            arrayOfKeys(ride.passengersOneWay).map((index) => (
+              <div key={index} className="flex justify-between">
+                <p>+ passageiro {index + 1}:</p>
+                <p>{toCurrency(ride.pricePerPassenger / 2)}</p>
+              </div>
+            ))}
         </div>
       )}
 
