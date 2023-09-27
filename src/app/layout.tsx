@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "GoUni",
   description: "Ride app for college students",
-  manifest: '/manifest.json',
+  manifest: "/manifest.webmanifest",
 };
 
 export default function RootLayout({
