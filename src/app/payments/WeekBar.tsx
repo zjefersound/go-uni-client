@@ -1,6 +1,7 @@
 import { IRide } from "@/models/IRide";
 import { arrayOfKeys } from "@/utils/arrayOfKeys";
 import { daysInMonth } from "@/utils/date/daysInMonth";
+import { getMonth } from "@/utils/date/getMonth";
 import clsx from "clsx";
 
 interface Props {
@@ -9,8 +10,9 @@ interface Props {
 }
 
 export function WeekBar({ firstDate, rides = [] }: Props) {
-  const firstDay = firstDate.getDate();
-  const lastDay = daysInMonth(firstDate.getMonth(), firstDate.getFullYear());
+  const firstDay = firstDate.getUTCDate();
+  const month = getMonth(firstDate);
+  const lastDay = daysInMonth(month, firstDate.getFullYear());
   const dayInitials = ["S", "T", "Q", "Q", "S", "S", "D"];
   return (
     <ul className="flex justify-between">
@@ -31,7 +33,7 @@ export function WeekBar({ firstDate, rides = [] }: Props) {
               }
             )}
           >
-            {(firstDay + index) % lastDay}
+            {(firstDay + index -1) % lastDay + 1}
           </div>
         </li>
       ))}
