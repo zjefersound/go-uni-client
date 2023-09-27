@@ -6,6 +6,7 @@ import { PiGasPump } from "react-icons/pi";
 import { CardButton } from "@/components/CardButton";
 import { AiOutlinePlus } from "react-icons/ai";
 import Link from "next/link";
+import { Empty } from "@/components/Empty";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,7 @@ export default async function FuelSupplies() {
         <AiOutlinePlus className="h-8 w-8 text-emerald-600" /> Novo
         abastecimento
       </CardButton>
+      {!fuelSupplies.length && <Empty>Nenhum abastecimento encontrado</Empty>}
       <ul className="space-y-2">
         {fuelSupplies.map((fuelSupply) => (
           <li key={fuelSupply._id}>

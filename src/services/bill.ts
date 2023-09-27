@@ -10,6 +10,7 @@ const getAll = async ({ filters = [] }: IServiceOptions = {}) => {
       { key: "receiver._id", operation: "==", value: user.id },
       ...filters,
     ],
+    sort: {key: 'date', type: 'asc'}
   });
 };
 
