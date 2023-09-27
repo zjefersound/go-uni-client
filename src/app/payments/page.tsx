@@ -16,6 +16,7 @@ import {
 import { PiGasPump } from "react-icons/pi";
 import { WeekBar } from "./WeekBar";
 import { reverseArray } from "@/utils/reverseArray";
+import { Empty } from "@/components/Empty";
 
 export const dynamic = "force-dynamic";
 
@@ -43,10 +44,11 @@ export default async function Payments() {
         <AiOutlineCalendar className="text-emerald-600 mr-2" />
         De {printDate(startDate)} até {printDate(finishDate)}
       </div>
-      <div>
-        <WeekBar firstDate={previousMonday} rides={reverseArray(rides)} />
-      </div>
-      <h3 className="font-bold">Abastecimentos:</h3>
+      <WeekBar firstDate={previousMonday} rides={reverseArray(rides)} />
+
+      {Boolean(fuelSupplies?.length) && (
+        <h3 className="font-bold">Abastecimentos:</h3>
+      )}
       {fuelSupplies.map((fuelSupply) => (
         <Card key={fuelSupply._id}>
           <div className="flex items-center">
@@ -65,7 +67,7 @@ export default async function Payments() {
           </div>
         </Card>
       ))}
-      <h3 className="font-bold">Caronas pagas:</h3>
+      {Boolean(rides?.length) && <h3 className="font-bold">Caronas pagas:</h3>}
       {rides
         .filter((ride) => ride.paid)
         .map((ride) => (
@@ -85,7 +87,9 @@ export default async function Payments() {
             </div>
           </Card>
         ))}
-      <h3 className="font-bold">Caronas a receber:</h3>
+      {Boolean(rides?.length) && (
+        <h3 className="font-bold">Caronas a receber:</h3>
+      )}
       {rides
         .filter((ride) => !ride.paid)
         .map((ride) => (
@@ -104,6 +108,7 @@ export default async function Payments() {
             </div>
           </Card>
         ))}
+      {!rides?.length && <Empty>Nenhuma carona encontrada</Empty>}
     </>
   );
 }

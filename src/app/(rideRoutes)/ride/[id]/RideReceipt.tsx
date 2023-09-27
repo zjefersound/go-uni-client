@@ -1,13 +1,23 @@
 "use client";
 import { IRide } from "@/models/IRide";
 import { calculateRideTotal } from "@/logic/calculateRideTotal";
-import { AiOutlineCheck } from "react-icons/ai";
+import { AiOutlineCheck, AiOutlineEdit } from "react-icons/ai";
 import { Receipt } from "@/components/Receipt";
+import Link from "next/link";
 
 export function RideReceipt({ ride }: { ride: IRide }) {
   return (
     <Receipt.Root>
+      <div className="flex">
       <h2 className="font-bold">A receber:</h2>
+        <Link
+            href={`/edit-ride/${ride._id}`}
+            className="flex items-center font-bold ml-auto transition text-emerald-600 hover:text-emerald-500"
+          >
+            Editar ou pagar
+            <AiOutlineEdit className="h-5 w-5 ml-1" />
+          </Link>
+      </div>
 
       <Receipt.Section>
         <Receipt.Subtitle>Passageiros</Receipt.Subtitle>
