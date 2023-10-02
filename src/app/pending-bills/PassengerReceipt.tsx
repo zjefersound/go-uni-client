@@ -1,10 +1,13 @@
 "use client";
+import { Dialog } from "@/components/Dialog";
 import { Receipt } from "@/components/Receipt";
+import { TextButton } from "@/components/TextButton";
 import { urlFor } from "@/configs/sanity";
 import { IBill } from "@/models/IBill";
 import { getBillsSum } from "@/services/utils/billServiceUtils";
 import { printDate } from "@/utils/date/printDate";
 import { printWeekday } from "@/utils/date/printWeekday";
+import { PayBillsDialog } from "./PayBillsDialog";
 
 interface Props {
   bills: IBill[];
@@ -22,6 +25,7 @@ export function PassengerReceipt({ bills }: Props) {
           />
         )}
         <p className="font-bold">{bills[0].payer?.name || "Convidados"}:</p>
+        <PayBillsDialog bills={bills} />
       </div>
 
       <Receipt.Section>

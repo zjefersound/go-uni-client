@@ -4,8 +4,8 @@ import { AiOutlineClose } from "react-icons/ai";
 
 interface DialogRootProps {
   children: ReactNode;
-  onOpenChange: (open: boolean) => void;
-  open: boolean;
+  onOpenChange?: (open: boolean) => void;
+  open?: boolean;
 }
 export function DialogRoot({ children, onOpenChange, open }: DialogRootProps) {
   return <DialogPrimitive.Root onOpenChange={onOpenChange} open={open}>{children}</DialogPrimitive.Root>;
