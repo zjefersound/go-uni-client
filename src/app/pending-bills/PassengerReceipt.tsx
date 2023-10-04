@@ -1,13 +1,11 @@
 "use client";
-import { Dialog } from "@/components/Dialog";
 import { Receipt } from "@/components/Receipt";
-import { TextButton } from "@/components/TextButton";
 import { urlFor } from "@/configs/sanity";
 import { IBill } from "@/models/IBill";
 import { getBillsSum } from "@/services/utils/billServiceUtils";
 import { printDate } from "@/utils/date/printDate";
 import { printWeekday } from "@/utils/date/printWeekday";
-import { PayBillsDialog } from "./PayBillsDialog";
+import { PayBillsDialog } from "@/components/bill/PayBillsDialog";
 
 interface Props {
   bills: IBill[];
