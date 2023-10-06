@@ -5,6 +5,7 @@ import { IBill } from "@/models/IBill";
 import { getBillsSum } from "@/services/utils/billServiceUtils";
 import { printDate } from "@/utils/date/printDate";
 import { printWeekday } from "@/utils/date/printWeekday";
+import { PayBillsDialog } from "@/components/bill/PayBillsDialog";
 
 interface Props {
   bills: IBill[];
@@ -22,6 +23,7 @@ export function PassengerReceipt({ bills }: Props) {
           />
         )}
         <p className="font-bold">{bills[0].payer?.name || "Convidados"}:</p>
+        <PayBillsDialog bills={bills} />
       </div>
 
       <Receipt.Section>
