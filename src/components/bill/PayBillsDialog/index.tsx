@@ -6,7 +6,7 @@ import { TextButton } from "@/components/TextButton";
 import { IBill } from "@/models/IBill";
 import { toCurrency } from "@/utils/toCurrency";
 import { PayBillItem } from "./PayBillItem";
-import { usePayBills } from "./hooks/usePayBills";
+import { usePayBillsDialog } from "./hooks/usePayBillsDialog";
 
 export function PayBillsDialog({ bills }: { bills: IBill[] }) {
   const {
@@ -17,7 +17,7 @@ export function PayBillsDialog({ bills }: { bills: IBill[] }) {
     loading,
     total,
     onSubmit
-  } = usePayBills({ bills })
+  } = usePayBillsDialog({ bills })
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>

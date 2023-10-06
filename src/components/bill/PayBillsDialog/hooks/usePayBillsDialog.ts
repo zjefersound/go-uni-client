@@ -6,7 +6,7 @@ import { getBillsSum } from "@/services/utils/billServiceUtils";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 
-export function usePayBills({ bills }: { bills: IBill[] }) {
+export function usePayBillsDialog({ bills }: { bills: IBill[] }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
