@@ -30,10 +30,20 @@ const handleDelete = (id: string) => {
   return BillRepository.delete(id);
 };
 
+const payByIds = async (ids: string[]) => {
+  const results = [];
+  for (const billId of ids) {
+    const result = await BillRepository.patch(billId, { paid: true });
+    results.push(result);
+  }
+  return results;
+}
+
 export const billService = {
   getAll,
   getById,
   create,
   patch,
   delete: handleDelete,
+  payByIds
 };

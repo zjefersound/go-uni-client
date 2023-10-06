@@ -1,6 +1,10 @@
 import { printDate } from "@/utils/date/printDate";
 import { Card } from "../Card";
-import { AiOutlineUser, AiOutlineUserSwitch } from "react-icons/ai";
+import {
+  AiOutlineUser,
+  AiOutlineUserSwitch,
+  AiOutlineDollar,
+} from "react-icons/ai";
 import { toCurrency } from "@/utils/toCurrency";
 import { calculateRideTotal } from "@/logic/calculateRideTotal";
 import { IRide } from "@/models/IRide";
@@ -19,8 +23,12 @@ export function RideCard({ ride }: { ride: IRide }) {
             <p className="text-xs text-gray-600 flex items-center">
               <AiOutlineUserSwitch /> {ride.passengersOneWay || 0}
             </p>
-            <p className="text-xs text-gray-600 flex items-center">
-              Pago: {ride.paid ? "Sim" : "Não"}
+            <p
+              className={`text-xs font-bold ${
+                ride.paid ? "text-emerald-600" : "text-gray-600"
+              } flex items-center`}
+            >
+              <AiOutlineDollar /> {ride.paid ? "Pago" : "Pendente"}
             </p>
           </div>
         </div>
